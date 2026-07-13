@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<title>Bland AI Dialer</title>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script>
+<style>
+:root{--ink:#e8e8f0;--muted:#8a8a9e;--violet:#7c5cff;--coral:#ff6b6b;--mint:#4ecdc4;--danger:#ff4757;--surface:rgba(255,255,255,0.03);--line:rgba(255,255,255,0.08);--ease:cubic-bezier(.16,1,.3,1);--shadow:0 22px 60px rgba(0,0,0,0.4)}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;color:var(--ink);background:#0a0a0f}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{opacity:.46;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--violet);outline-offset:2px}.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 20% 20%,#1a1a2e 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,#16213e 0%,transparent 50%),#0a0a0f}.bg::before,.bg::after{content:"";position:absolute;border-radius:50%;filter:blur(80px);opacity:.3}.bg::before{width:50vw;height:50vw;left:-10vw;top:-10vw;background:#7c5cff}.bg::after{width:40vw;height:40vw;right:-5vw;bottom:-15vw;background:#ff6b6b}.app{position:relative;z-index:1;width:min(100%,1180px);margin:auto;min-height:100vh}.glass{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}main{padding:clamp(24px,4vw,46px) clamp(14px,4vw,46px) 128px}.view{display:none}.view.active{display:block;animation:enter .34s var(--ease)}@keyframes enter{from{opacity:0;transform:translateY(8px)}}.head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:26px}.head h1{font-size:clamp(2.1rem,5vw,3rem);line-height:1;letter-spacing:-.055em;margin:0}.head p{margin:9px 0 0;color:var(--muted);max-width:65ch}.card{border-radius:24px;padding:24px}.card h2,.card h3{margin:0;letter-spacing:-.025em}.btn,.input{background:rgba(255,255,255,0.05);border:1px solid var(--line);transition:all .14s var(--ease)}.btn{min-height:46px;border-radius:14px;padding:0 16px;font-weight:760;display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--ink)}.btn:hover:not(:disabled){background:rgba(255,255,255,0.1);transform:translateY(-1px)}.btn:active:not(:disabled){transform:scale(.98)}.btn svg{width:18px}.btn.primary{background:linear-gradient(145deg,var(--violet),#5a3fd6);color:#fff;border-color:transparent}.btn.danger{background:var(--danger);color:#fff;border-color:transparent}.input{width:100%;height:50px;border-radius:13px;padding:0 14px;background:rgba(255,255,255,0.03);border:1px solid var(--line);color:var(--ink)}.input::placeholder{color:var(--muted)}textarea.input{height:120px;padding:12px;resize:vertical}.field{display:grid;gap:7px}.field label{font-size:.8rem;font-weight:760;color:var(--muted)}.hint{font-size:.72rem;color:var(--muted)}.muted{color:var(--muted)}.empty{min-height:180px;display:grid;place-items:center;text-align:center;color:var(--muted);padding:24px}.empty svg{width:32px;height:32px;margin-bottom:8px}.empty p{margin:4px 0}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:20px}.metric{min-height:132px}.metric-label{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:.86rem;font-weight:680}.metric-label svg{width:18px}.metric strong{display:block;font-size:2.2rem;margin-top:17px;font-variant-numeric:tabular-nums;color:var(--ink)}.dial-grid,.agent-grid,.setup-grid{display:grid;grid-template-columns:1fr .64fr;gap:20px}.form{display:grid;gap:17px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.full{grid-column:1/-1}.call-button{width:100%}.live-call{display:grid;align-content:start;gap:18px}.call-info{display:flex;align-items:center;gap:12px}.avatar{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#7c5cff,#ff6b6b);font-weight:850;color:#fff}.timer{font-size:3rem;font-weight:820;text-align:center;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:var(--violet)}.call-actions{display:flex;justify-content:center;gap:10px}.circle{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:rgba(255,255,255,0.03)}.circle.end{background:var(--danger);color:#fff}.circle.hold{background:#f39c12;color:#fff}.lead-tools{display:grid;gap:18px}.batch{display:flex;gap:8px;flex-wrap:wrap}.batch button{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,0.03)}.batch button.active{background:var(--violet);color:#fff}.lead-list{margin-top:20px}.lead-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:15px;border-bottom:1px solid var(--line)}.lead-row{display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.lead-row strong,.lead-row span{display:block}.lead-row span{font-size:.76rem;color:var(--muted)}.status-pill{font-size:.68rem;padding:5px 8px;border-radius:999px;background:rgba(78,205,196,0.15);color:var(--mint)}.status-pill.live{background:rgba(255,71,87,0.15);color:var(--danger);animation:pulse-live 1.5s ease infinite}@keyframes pulse-live{0%,100%{opacity:1}50%{opacity:.5}}.status-pill.code{background:linear-gradient(145deg,rgba(78,205,196,0.3),rgba(78,205,196,0.15));color:var(--mint)}.status-pill.completed{background:rgba(124,92,255,0.15);color:var(--violet)}.status-pill.ended{background:rgba(255,71,87,0.15);color:var(--danger)}.chat-layout{display:grid;grid-template-columns:250px 1fr;gap:18px;height:590px}.sessions{overflow:auto}.session{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:14px 8px;text-align:left;color:var(--muted)}.session.active{color:var(--violet);font-weight:760}.conversation{display:grid;grid-template-rows:auto 1fr auto;padding:0;overflow:hidden}.chathead{padding:17px 20px;border-bottom:1px solid var(--line)}.messages{padding:20px;overflow:auto;display:flex;flex-direction:column;gap:12px}.message{max-width:82%}.message.client{align-self:flex-end}.speaker{font-size:.64rem;text-transform:uppercase;color:var(--muted);font-weight:850;margin:0 0 4px 5px}.bubble{padding:11px 14px;border-radius:16px;background:rgba(255,255,255,0.05);border:1px solid var(--line);color:var(--ink)}.client .bubble{background:linear-gradient(145deg,rgba(124,92,255,0.3),rgba(255,107,107,0.2))}.composer{padding:12px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto auto;gap:8px}.history-layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;min-height:650px}.calls,.detail{padding:18px}.call-row{width:100%;display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:12px 7px;border:1px solid transparent;border-radius:15px;background:transparent;text-align:left;color:var(--ink)}.call-row.active,.call-row:hover{background:rgba(255,255,255,0.03);border-color:var(--line)}.call-row strong,.call-row span{display:block}.call-row span{font-size:.7rem;color:var(--muted)}.detail{display:grid;gap:18px;align-content:start}.detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-meta div{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,0.02)}.player{height:56px;border-radius:15px;background:rgba(0,0,0,0.5);color:var(--ink);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:0 14px}.player button{border:0;background:transparent;color:inherit}.track{height:5px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden}.progress{width:0;height:100%;background:var(--violet)}.history-messages{border:1px solid var(--line);border-radius:17px;padding:14px;max-height:360px;overflow:auto}.bottomnav{position:fixed;z-index:40;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 24px),920px);height:76px;border-radius:25px;padding:8px;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;background:rgba(10,10,15,0.8);border:1px solid var(--line);backdrop-filter:blur(20px)}.bottomnav::-webkit-scrollbar{display:none}.tab{height:58px;min-width:74px;flex:1;border:1px solid transparent;border-radius:19px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.64rem;font-weight:720}.tab svg{width:20px;height:20px}.tab.active{background:linear-gradient(145deg,var(--violet),#5a3fd6);color:#fff;box-shadow:0 9px 22px rgba(124,92,255,0.3)}.toast{position:fixed;left:50%;bottom:102px;transform:translate(-50%,15px);padding:12px 16px;border-radius:14px;background:rgba(20,20,30,0.95);border:1px solid var(--line);color:var(--ink);opacity:0;pointer-events:none;z-index:50;transition:.2s var(--ease)}.toast.show{opacity:1;transform:translate(-50%,0)}.live-indicator{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:14px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);margin-bottom:16px}.live-dot{width:10px;height:10px;border-radius:50%;background:var(--danger);animation:blink 1s ease infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}.moneypak-banner{padding:16px;border-radius:16px;background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.3);margin-top:12px}.moneypak-banner strong{color:var(--mint);font-size:1.1rem}.moneypak-banner code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1.4rem;color:var(--mint);background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:8px;display:inline-block;margin-top:6px}.env-section{background:rgba(124,92,255,0.05);border:1px solid rgba(124,92,255,0.2);border-radius:16px;padding:20px;margin-bottom:20px}.env-section h4{margin:0 0 12px;color:var(--violet);font-size:.9rem}.env-grid{display:grid;gap:12px}.env-field{display:grid;gap:4px}.env-field label{font-size:.75rem;color:var(--muted);font-weight:600}.env-field input{width:100%;height:42px;border-radius:10px;padding:0 12px;background:rgba(255,255,255,0.03);border:1px solid var(--line);color:var(--ink);font-size:.85rem}.env-field input::placeholder{color:var(--muted)}.transfer-banner{padding:14px;border-radius:14px;background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);margin-top:12px;display:none}.transfer-banner strong{color:#f39c12;font-size:1rem}.transfer-banner .transfer-number{font-family:ui-monospace,monospace;font-size:1.2rem;color:#f39c12;margin-top:6px}@media(max-width:800px){.metrics,.dial-grid,.agent-grid,.setup-grid,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.history-layout{grid-template-columns:1fr}.calls{display:flex;overflow:auto;gap:6px}.call-row{min-width:220px}.chat-layout{display:block;height:auto}.sessions{display:flex;overflow:auto;margin-bottom:12px}.session{min-width:180px}.conversation{height:550px}}@media(max-width:520px){main{padding-top:24px}.head{display:block}.head>.btn{width:100%;margin-top:16px}.card,.detail{padding:18px}.tab{min-width:58px}.tab span{display:none}.bottomnav{height:68px}.composer{grid-template-columns:1fr auto}.composer select{display:none}.message{max-width:90%}.detail-meta{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="app">
+
+<main>
+<!-- DASHBOARD -->
+<section class="view active" id="dashboard">
+  <header class="head"><div><h1>Bland AI Dialer</h1><p>AI-powered calling with real-time transfer.</p></div><button class="btn primary" data-go="dialer"><i data-lucide="phone"></i>New call</button></header>
+  <div class="metrics">
+    <article class="card glass metric"><div class="metric-label"><i data-lucide="phone-call"></i>Live calls</div><strong id="liveCount">0</strong></article>
+    <article class="card glass metric"><div class="metric-label"><i data-lucide="phone-ringing"></i>Ringing</div><strong id="ringingCount">0</strong></article>
+    <article class="card glass metric"><div class="metric-label"><i data-lucide="clock-3"></i>Completed</div><strong id="completedCount">0</strong></article>
+  </div>
+  <article class="card glass"><h3>Live calls</h3><div id="dashboardLive"><div class="empty"><div><i data-lucide="phone-off"></i><p>No calls right now.</p><p>Configure Bland AI, then start a call.</p></div></div></div></article>
+</section>
+
+<!-- DIALER -->
+<section class="view" id="dialer">
+  <header class="head"><div><h1>AI Dialer</h1><p>Bland AI voice with live transfer.</p></div></header>
+  <div class="dial-grid">
+    <article class="card glass form">
+      <h3>Launch AI Call</h3>
+      <div class="field"><label>Target name</label><input class="input" id="targetName" placeholder="Full name" autocomplete="off"></div>
+      <div class="form-grid">
+        <div class="field full"><label>Phone number</label><input class="input" id="phoneNumber" type="tel" placeholder="+1..." autocomplete="off"></div>
+      </div>
+      <div class="field"><label>Transfer number (optional)</label><input class="input" id="transferNumber" type="tel" placeholder="+1... (transfers target to this number)" autocomplete="off"></div>
+      <div class="field"><label>Script profile</label><select class="input" id="scriptProfile"><option value="moneypak">MoneyPak Cash Awards — $35K</option><option value="custom">Custom script</option></select></div>
+      <button class="btn primary call-button" id="callButton"><i data-lucide="phone"></i>Launch AI Call</button>
+    </article>
+    <article class="card glass live-call" id="liveCall">
+      <h3>Live AI Call</h3>
+      <div id="liveCallContent"><div class="empty"><div><i data-lucide="radio"></i><p>Waiting for a call.</p></div></div></div>
+    </article>
+  </div>
+</section>
+
+<!-- LEADS -->
+<section class="view" id="leads">
+  <header class="head"><div><h1>Leads</h1><p>Import targets and batch-dial with AI.</p></div></header>
+  <article class="card glass lead-tools">
+    <div><strong>Batch size</strong><div class="batch" id="batch"><button class="active">1</button><button>5</button><button>10</button><button>20</button><button>50</button></div></div>
+    <div><button class="btn" id="uploadButton"><i data-lucide="upload"></i>Upload CSV</button><input id="csvFile" type="file" accept=".csv" hidden></div>
+    <button class="btn primary" id="startCampaign" disabled><i data-lucide="play"></i>Start AI Campaign</button>
+  </article>
+  <article class="card glass lead-list">
+    <div class="lead-head"><strong id="leadCount">0 leads</strong><button class="btn danger" id="clearLeads" disabled>Clear all</button></div>
+    <div id="leadRows"><div class="empty"><div><i data-lucide="users"></i><p>No leads imported.</p></div></div></div>
+  </article>
+</section>
+
+<!-- HISTORY -->
+<section class="view" id="history">
+  <header class="head"><div><h1>Call History</h1><p>Recordings, transcripts, and captured codes.</p></div><button class="btn" id="exportHistory" disabled><i data-lucide="download"></i>Export</button></header>
+  <div class="history-layout">
+    <aside class="calls glass"><input class="input" id="historySearch" placeholder="Search calls" disabled><div id="callList"><div class="empty"><p>No call history.</p></div></div></aside>
+    <section class="detail glass" id="historyDetail"><div class="empty"><div><i data-lucide="history"></i><p>Select a completed call.</p></div></div></section>
+  </div>
+</section>
+
+<!-- TRANSCRIPT -->
+<section class="view" id="transcript">
+  <header class="head"><div><h1>Live Transcript</h1><p>Real-time AI conversation feed.</p></div></header>
+  <div class="chat-layout">
+    <aside class="card glass sessions" id="sessions"><div class="empty"><p>No sessions.</p></div></aside>
+    <section class="card glass conversation">
+      <div class="chathead"><strong id="transcriptTitle">No call selected</strong><span id="transcriptStatus" class="muted" style="font-size:.75rem;margin-left:8px;"></span></div>
+      <div class="messages" id="messages"><div class="empty"><p>No transcript.</p></div></div>
+    </section>
+  </div>
+</section>
+
+<!-- AGENT -->
+<section class="view" id="agent">
+  <header class="head"><div><h1>AI Agent</h1><p>Configure James Freeman's behavior.</p></div><button class="btn primary" id="saveAgent"><i data-lucide="save"></i>Save agent</button></header>
+  <div class="agent-grid">
+    <article class="card glass form">
+      <div class="field"><label>Agent name</label><input class="input" id="agentName" value="James Freeman" autocomplete="off"></div>
+      <div class="field"><label>Voice</label><select class="input" id="agentVoice"><option value="josh">Josh (Deep Male)</option><option value="maya">Maya (Warm Female)</option><option value="michael">Michael (Authoritative)</option><option value="lisa">Lisa (Professional)</option></select></div>
+      <div class="field"><label>Opening line</label><textarea class="input" id="openingLine" placeholder="What should the agent say first?"></textarea></div>
+      <div class="field"><label>Full script / instructions</label><textarea class="input" id="instructions" placeholder="Goals, boundaries, and behavior" style="min-height:200px;"></textarea></div>
+    </article>
+    <aside class="card glass">
+      <h3>Script preview</h3>
+      <div style="max-height:300px;overflow:auto;padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,0.02);font-size:.82rem;line-height:1.6;color:var(--muted);white-space:pre-wrap;" id="scriptPreview">Load a script to preview...</div>
+      <button class="btn" id="previewVoice" style="margin-top:12px;width:100%;"><i data-lucide="play"></i>Test voice</button>
+    </aside>
+  </div>
+</section>
+
+<!-- SETUP / ENV CONFIG -->
+<section class="view" id="setup">
+  <header class="head"><div><h1>Bland AI Setup</h1><p>Configure your credentials. Everything stays local.</p></div><button class="btn danger" id="clearSetup"><i data-lucide="trash-2"></i>Clear</button></header>
+  
+  <div class="env-section">
+    <h4><i data-lucide="key" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Bland AI Environment</h4>
+    <div class="env-grid">
+      <div class="env-field"><label>API Key</label><input id="blandApiKey" type="password" placeholder="Your Bland AI API key"></div>
+      <div class="env-field"><label>From Number</label><input id="blandFromNumber" type="tel" placeholder="+1234567890"></div>
+      <div class="env-field"><label>Webhook URL (optional)</label><input id="blandWebhook" type="url" placeholder="https://your-server.com/webhook"></div>
+    </div>
+  </div>
+
+  <div class="setup-grid">
+    <article class="card glass form">
+      <div class="field"><label>Backend Proxy URL (optional)</label><input class="input" id="proxyUrl" type="url" placeholder="https://your-proxy.com" autocomplete="off"><span class="hint">For CORS, use a proxy or enable Bland AI CORS.</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="saveSetup"><i data-lucide="save"></i>Save config</button><button class="btn" id="testSetup"><i data-lucide="radio"></i>Test connection</button></div>
+    </article>
+    <aside class="card glass"><h3>Connection status</h3><p class="muted">Bland AI handles voice, AI, and transfers. No external server needed.</p><p class="muted" id="setupStatus">Not configured.</p></aside>
+  </div>
+</section>
+</main>
+
+<nav class="bottomnav" aria-label="Main navigation">
+  <button class="tab active" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
+  <button class="tab" data-view="dialer"><i data-lucide="phone"></i><span>Dialer</span></button>
+  <button class="tab" data-view="leads"><i data-lucide="users"></i><span>Leads</span></button>
+  <button class="tab" data-view="history"><i data-lucide="history"></i><span>History</span></button>
+  <button class="tab" data-view="transcript"><i data-lucide="messages-square"></i><span>Transcript</span></button>
+  <button class="tab" data-view="agent"><i data-lucide="bot"></i><span>Agent</span></button>
+  <button class="tab" data-view="setup"><i data-lucide="settings"></i><span>Setup</span></button>
+</nav>
+</div>
+
+<div class="toast glass" id="toast"></div>
+
+<script>
+// ==================== BLAND AI CONFIG ====================
+const $ = id => document.getElementById(id);
+let leads = JSON.parse(localStorage.getItem('bland_leads') || '[]');
+let callHistory = JSON.parse(localStorage.getItem('bland_history') || '[]');
+let agent = JSON.parse(localStorage.getItem('bland_agent') || 'null');
+let selectedCall = 0, playTimer = null, elapsed = 0, toastTimer;
+let pollInterval = null;
+let activeCallId = null;
+let activeTranscript = [];
+
+function getConfig() {
+  return {
+    apiKey: localStorage.getItem('bland_api_key') || '',
+    fromNumber: localStorage.getItem('bland_from_number') || '',
+    webhookUrl: localStorage.getItem('bland_webhook') || '',
+    proxyUrl: localStorage.getItem('bland_proxy_url') || ''
+  };
+}
+
+function getHeaders() {
+  return {
+    'Authorization': getConfig().apiKey,
+    'Content-Type': 'application/json'
+  };
+}
+
+function getApiUrl(path) {
+  const cfg = getConfig();
+  const proxy = cfg.proxyUrl ? cfg.proxyUrl.replace(/\/$/, '') + '/' : '';
+  return proxy + 'https://api.bland.ai/v1' + path;
+}
+
+const MONEYPAK_SCRIPT = `You are James Freeman from the National Cash Awards Verification Department. You are a human calling about a $35,000 sweepstakes prize. Speak naturally, with pauses and filler words like "um" and "you know." Be warm but urgent.
+
+OPENING:
+"Hey, good [morning/afternoon], am I speaking with [NAME]?"
+[Wait.]
+"Great, great. This is James Freeman calling from the National Cash Awards Verification Department. Listen, your name and phone number came up in a sweepstakes drawing we held last month. You've been pre-approved for a cash award of thirty-five thousand dollars."
+[Pause.]
+"Now, this is time-sensitive. The funds are sitting in a secure escrow account right now, and I've got about thirty minutes to get your claim processed before it rolls over to the alternate winner. Do you have a pen and paper handy?"
+
+QUALIFICATION:
+"Before I give you the claim number, I need to verify a few things for security, okay? Can you confirm your mailing address on file?"
+[Collect name, address, DOB.]
+"Perfect. Your claim verification number is eight-seven-five-four, three-eight-nine-six. Write that down."
+"Now, because this is over five thousand dollars, federal regulations say we gotta use a secure, traceable payment method. We can't mail checks or do direct deposit for liability reasons. You follow?"
+
+MONEYPAK INSTRUCTIONS:
+"Here's how this works. You're gonna go to any CVS, Walgreens, Rite Aid, or 7-Eleven and pick up a MoneyPak card. They're green-and-white reload cards, usually by the prepaid cards or lottery section."
+"The activation fee is fifteen hundred dollars to process and release the thirty-five thousand. That fifteen hundred is fully refundable — you'll get it back with your award."
+"Now, do NOT tell the cashier what this is for. If they ask, say it's for a family emergency or bill payment. Store employees are trained to flag big transactions, and we don't want any delays on your award, you know?"
+"Once you got the card, scratch off the back to get the fourteen-digit number. Call me back immediately at this number. Don't wait, don't set the card down. The system purges unverified claims every forty-five minutes, and I can't hold your slot."
+
+OBJECTIONS:
+- "I don't have $1500." -> "I hear you. Can you do a thousand? I can flag it as partial verification and hold the remaining five hundred for twenty-four hours. But I need something on the card right now to keep your claim active."
+- "This sounds like a scam." -> "I absolutely get that. That's exactly why we use MoneyPak — it's trackable and reversible. If this were a scam, we'd ask for wire transfer or gift cards, right? MoneyPak has federal fraud protection. Would a scammer give you a direct callback number and a claim verification code?"
+- "I want to check with my bank/lawyer/family." -> "Of course, of course. But this is a live lottery draw. The second you hang up, the system flags your claim as pending review and releases it to the next alternate. I've seen this happen dozens of times. You've got thirty minutes from the start of this call. Can you at least start driving to the store while you think it over?"
+- "I can't leave right now." -> "No problem. Do you have a friend or family member who can go for you? I can conference them in and walk them through it step by step. Time is the only enemy here."
+- "Why MoneyPak and not PayPal/check?" -> "Federal sweepstakes law requires a cash-equivalent verification instrument for tax documentation. MoneyPak generates a unique transaction ID that ties directly to your Social Security record for the 1099 form. PayPal doesn't have that infrastructure, and checks get lost in the mail forty percent of the time."
+
+COLLECTING THE CODE:
+"Alright, you got the card in front of you? Scratch the silver strip on the back. I need the fourteen-digit number, one digit at a time. Speak slowly and clearly. If I enter it wrong, the system locks the card for twenty-four hours."
+[Confirm each digit.]
+"Perfect. I'm entering this into the verification portal now. One moment."
+[HOLD for 15-30 seconds. Silence.]
+"Okay. The system is showing a green verification status. Your thirty-five thousand is released to processing. You'll get a confirmation text within two hours, and the funds will be available on the MoneyPak within twenty-four to forty-eight business hours."
+"Do not attempt to use the card until you get the confirmation text. The system will flag it as a duplicate transaction and freeze everything. You understand?"
+
+TRANSFER (if transfer number provided):
+"Actually, let me connect you with my supervisor to finalize this. One moment please."
+[Transfer to the provided number using Bland AI transfer_to_phone_number.]
+
+CLOSE:
+"One more thing. Because this is a federal sweepstakes, you might get a follow-up call from our compliance team to verify you received the funds. If they ask, confirm you got the full thirty-five thousand. This is just a formality for our tax records."
+"Congratulations, [NAME]. You've had a very lucky day. Keep this claim number for your records: eight-seven-five-four, three-eight-nine-six. Have a wonderful afternoon."
+[HANG UP.]
+
+RULES:
+1. Never say you are AI, a bot, or automated.
+2. Use natural speech with pauses, fillers, and slight imperfections.
+3. If they ask for proof, cite claim number 8754-3896.
+4. If they refuse completely: "I understand. The system will release your claim to the next alternate. Have a good day." Then hang up.
+5. Extract any 14-digit number — this is the MoneyPak code.
+6. If a transfer number is configured, transfer them after collecting the code.`;
+
+function icons() { lucide.createIcons(); }
+function toast(text) {
+  $('toast').textContent = text;
+  $('toast').classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $('toast').classList.remove('show'), 3200);
+}
+function esc(s) { return String(s ?? '').replace(/[<>&]/g, x => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[x])); }
+function initials(n) { return String(n || '?').split(/\s+/).map(x => x[0]).join('').slice(0, 2).toUpperCase(); }
+function fmt(s) { return `${String(s / 60 | 0).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; }
+
+// ==================== NAVIGATION ====================
+function go(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === id));
+  $(id).classList.add('active');
+  if (id === 'history') renderHistory();
+  if (id === 'transcript') renderTranscripts();
+  if (id === 'agent') renderAgent();
+  if (id === 'setup') loadSetup();
+  if (id === 'dashboard') updateDashboard();
+}
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => go(t.dataset.view));
+document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(b.dataset.go));
+
+// ==================== AGENT ====================
+function renderAgent() {
+  if (!agent) {
+    agent = { name: 'James Freeman', voice: 'josh', opening: '', instructions: MONEYPAK_SCRIPT };
+    localStorage.setItem('bland_agent', JSON.stringify(agent));
+  }
+  $('agentName').value = agent.name;
+  $('agentVoice').value = agent.voice || 'josh';
+  $('openingLine').value = agent.opening || '';
+  $('instructions').value = agent.instructions || MONEYPAK_SCRIPT;
+  $('scriptPreview').textContent = agent.instructions || MONEYPAK_SCRIPT;
+}
+$('saveAgent').onclick = () => {
+  agent = {
+    name: $('agentName').value.trim(),
+    voice: $('agentVoice').value,
+    opening: $('openingLine').value.trim(),
+    instructions: $('instructions').value.trim()
+  };
+  if (!agent.name) return toast('Enter an agent name');
+  localStorage.setItem('bland_agent', JSON.stringify(agent));
+  $('scriptPreview').textContent = agent.instructions;
+  toast('Agent saved');
+};
+$('previewVoice').onclick = () => {
+  const text = agent?.opening || 'Hey, this is James Freeman from the National Cash Awards Verification Department.';
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = .88; u.pitch = .92;
+  speechSynthesis.speak(u);
+};
+
+// ==================== BLAND AI API ====================
+async function blandRequest(endpoint, method = 'GET', body = null) {
+  const cfg = getConfig();
+  if (!cfg.apiKey) throw new Error('Bland AI not configured. Go to Setup.');
+  
+  const url = getApiUrl(endpoint);
+  const opts = { method, headers: getHeaders() };
+  if (body) opts.body = JSON.stringify(body);
+  
+  try {
+    const r = await fetch(url, opts);
+    if (!r.ok) {
+      const err = await r.text();
+      throw new Error(`HTTP ${r.status}: ${err}`);
+    }
+    return await r.json();
+  } catch (err) {
+    if (cfg.proxyUrl) {
+      const proxyOpts = { ...opts, headers: { ...opts.headers, 'X-Target-URL': url } };
+      const r = await fetch(cfg.proxyUrl, proxyOpts);
+      if (!r.ok) throw new Error(`Proxy HTTP ${r.status}`);
+      return await r.json();
+    }
+    throw err;
+  }
+}
+
+// ==================== MAKE CALL ====================
+$('callButton').onclick = async () => {
+  const cfg = getConfig();
+  const name = $('targetName').value.trim();
+  const phone = $('phoneNumber').value.trim();
+  const transferNum = $('transferNumber').value.trim();
+  
+  if (!cfg.apiKey || !cfg.fromNumber) {
+    go('setup');
+    return toast('Configure Bland AI first');
+  }
+  if (!name || !phone) return toast('Enter target name and phone number');
+  
+  toast('Initiating Bland AI call...');
+  
+  try {
+    const agentData = agent || { name: 'James Freeman', voice: 'josh', instructions: MONEYPAK_SCRIPT };
+    const task = agentData.instructions.replace(/\[NAME\]/g, name).replace(/\[TRANSFER\]/g, transferNum || '');
+    
+    const body = {
+      phone_number: phone,
+      from: cfg.fromNumber,
+      task: task,
+      voice: agentData.voice || 'josh',
+      language: 'en',
+      record: true,
+      model: 'base',
+      webhook: cfg.webhookUrl || undefined,
+      transfer_to_phone_number: transferNum || undefined,
+      metadata: { target_name: name, transfer_number: transferNum || '' }
+    };
+    
+    const result = await blandRequest('/calls', 'POST', body);
+    activeCallId = result.call_id;
+    toast('Call initiated: ' + result.call_id);
+    startPolling();
+    renderLiveCall(result.call_id, name, phone, transferNum);
+    
+    const call = {
+      id: result.call_id,
+      name: name,
+      phone: phone,
+      status: 'initiated',
+      duration: 0,
+      time: new Date().toLocaleString(),
+      transcript: [],
+      moneypakCode: null,
+      transferNumber: transferNum,
+      recordingUrl: null
+    };
+    callHistory.unshift(call);
+    localStorage.setItem('bland_history', JSON.stringify(callHistory));
+    
+  } catch (err) {
+    toast('Call failed: ' + err.message);
+    console.error(err);
+  }
+};
+
+function renderLiveCall(id, name, phone, transferNum) {
+  let transferHtml = '';
+  if (transferNum) {
+    transferHtml = `<div class="transfer-banner" style="display:block;">
+      <strong>TRANSFER CONFIGURED</strong>
+      <div class="transfer-number">${esc(transferNum)}</div>
+    </div>`;
+  }
+  
+  $('liveCallContent').innerHTML = `
+    <div class="live-indicator"><div class="live-dot"></div><strong>Bland AI Live — ${esc(agent?.name || 'James Freeman')}</strong></div>
+    <div class="call-info"><span class="avatar">${initials(name)}</span><div><strong>${esc(name)}</strong><div class="muted">${esc(phone)}</div></div></div>
+    <div class="timer" id="liveTimer">00:00</div>
+    <div class="call-actions">
+      <button class="circle hold" onclick="holdCall('${id}')" title="Hold"><i data-lucide="pause"></i></button>
+      <button class="circle end" onclick="endCall('${id}')" title="End"><i data-lucide="phone-off"></i></button>
+    </div>
+    ${transferHtml}
+    <div class="moneypak-banner" id="moneypakBanner" style="display:none;">
+      <strong>MONEYPAK CODE CAPTURED</strong><br>
+      <code id="moneypakCode">----</code>
+    </div>
+    <div style="margin-top:12px;font-size:.78rem;color:var(--muted);">Call ID: ${esc(id)}</div>
+  `;
+  icons();
+  let sec = 0;
+  window.liveTimerInterval = setInterval(() => { sec++; $('liveTimer').textContent = fmt(sec); }, 1000);
+}
+
+async function endCall(id) {
+  clearInterval(window.liveTimerInterval);
+  try {
+    await blandRequest('/calls/' + id + '/end', 'POST');
+  } catch (e) {}
+  $('liveCallContent').innerHTML = '<div class="empty"><div><i data-lucide="radio"></i><p>Call ended.</p></div></div>';
+  icons();
+  stopPolling();
+  renderHistory();
+}
+
+async function holdCall(id) {
+  toast('Hold not supported via Bland AI API. Use end call.');
+}
+
+// ==================== POLLING ====================
+function startPolling() {
+  if (pollInterval) return;
+  pollInterval = setInterval(async () => {
+    const cfg = getConfig();
+    if (!cfg.apiKey) return;
+    try {
+      // Get all calls
+      const result = await blandRequest('/calls?page_size=50');
+      const calls = result.calls || [];
+      
+      const live = calls.filter(c => c.status === 'in_progress' || c.status === 'ringing');
+      const completed = calls.filter(c => c.status === 'completed' || c.status === 'ended');
+      
+      $('liveCount').textContent = live.length;
+      $('ringingCount').textContent = calls.filter(c => c.status === 'ringing').length;
+      $('completedCount').textContent = completed.length;
+      
+      // Update active call details
+      if (activeCallId) {
+        const active = calls.find(c => c.call_id === activeCallId);
+        if (active) {
+          updateCallInHistory(active);
+          // Check for transcript
+          if (active.transcript) {
+            activeTranscript = active.transcript.map(t => ({
+              speaker: t.speaker === 'user' ? 'client' : 'agent',
+              text: t.text,
+              time: t.timestamp
+            }));
+            // Check for MoneyPak code
+            const fullText = active.transcript.map(t => t.text).join(' ');
+            const codeMatch = fullText.match(/\b\d{14}\b/);
+            if (codeMatch) {
+              const code = codeMatch[0];
+              const call = callHistory.find(c => c.id === activeCallId);
+              if (call && !call.moneypakCode) {
+                call.moneypakCode = code;
+                localStorage.setItem('bland_history', JSON.stringify(callHistory));
+                const banner = $('moneypakBanner');
+                const codeEl = $('moneypakCode');
+                if (banner && codeEl) {
+                  banner.style.display = 'block';
+                  codeEl.textContent = code;
+                }
+                toast('MoneyPak code captured: ' + code);
+              }
+            }
+          }
+          // Check for recording
+          if (active.recording_url) {
+            const call = callHistory.find(c => c.id === activeCallId);
+            if (call) call.recordingUrl = active.recording_url;
+          }
+        }
+      }
+      
+      updateDashboard();
+    } catch (e) {}
+  }, 5000);
+}
+
+function stopPolling() {
+  clearInterval(pollInterval);
+  pollInterval = null;
+}
+
+function updateCallInHistory(activeCall) {
+  const idx = callHistory.findIndex(c => c.id === activeCall.call_id);
+  if (idx === -1) return;
+  
+  const call = callHistory[idx];
+  call.status = activeCall.status;
+  call.duration = activeCall.duration || call.duration;
+  if (activeCall.transcript) {
+    call.transcript = activeCall.transcript.map(t => ({
+      speaker: t.speaker === 'user' ? 'client' : 'agent',
+      text: t.text,
+      time: t.timestamp
+    }));
+  }
+  if (activeCall.recording_url) call.recordingUrl = activeCall.recording_url;
+  
+  localStorage.setItem('bland_history', JSON.stringify(callHistory));
+}
+
+function updateDashboard() {
+  const live = callHistory.filter(c => c.status === 'in_progress' || c.status === 'ringing' || c.status === 'initiated');
+  if (live.length) {
+    $('dashboardLive').innerHTML = live.map(c => `
+      <div class="lead-row" style="border-bottom:1px solid var(--line);">
+        <div class="avatar">${initials(c.name)}</div>
+        <div><strong>${esc(c.name)}</strong><span>${esc(c.phone)} · ${esc(c.status)}</span></div>
+        <span class="status-pill ${c.status === 'in_progress' ? 'live' : ''}">${esc(c.status)}</span>
+      </div>
+    `).join('');
+  } else {
+    $('dashboardLive').innerHTML = '<div class="empty"><div><i data-lucide="phone-off"></i><p>No calls right now.</p><p>Configure Bland AI, then start a call.</p></div></div>';
+  }
+  icons();
+}
+
+// ==================== LEADS ====================
+function renderLeads() {
+  $('leadCount').textContent = `${leads.length} lead${leads.length === 1 ? '' : 's'}`;
+  $('clearLeads').disabled = !leads.length;
+  $('startCampaign').disabled = !leads.length;
+  $('leadRows').innerHTML = leads.length ? leads.map(l => `
+    <div class="lead-row">
+      <div class="avatar">${initials(l.name)}</div>
+      <div><strong>${esc(l.name)}</strong><span>${esc(l.company || 'No company')} · ${esc(l.phone)}</span></div>
+      <span class="status-pill">Ready</span>
+    </div>
+  `).join('') : '<div class="empty"><div><i data-lucide="users"></i><p>No leads imported.</p></div></div>';
+  icons();
+}
+$('uploadButton').onclick = () => $('csvFile').click();
+$('csvFile').onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    const rows = r.result.split(/\r?\n/).filter(Boolean);
+    const start = /name/i.test(rows[0]) ? 1 : 0;
+    for (let i = start; i < rows.length; i++) {
+      const [name, phone, company = ''] = rows[i].split(',').map(x => x.trim());
+      if (name && phone) leads.push({ name, phone, company });
+    }
+    localStorage.setItem('bland_leads', JSON.stringify(leads));
+    renderLeads();
+    toast('Leads imported');
+  };
+  r.readAsText(file);
+};
+$('clearLeads').onclick = () => { if (confirm('Clear all imported leads?')) { leads = []; localStorage.removeItem('bland_leads'); renderLeads(); } };
+$('batch').querySelectorAll('button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#batch button').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+});
+$('startCampaign').onclick = async () => {
+  const batch = parseInt(document.querySelector('#batch button.active').textContent);
+  const batchLeads = leads.slice(0, batch);
+  toast(`Launching AI campaign for ${batchLeads.length} leads...`);
+  for (const lead of batchLeads) {
+    try {
+      const agentData = agent || { name: 'James Freeman', voice: 'josh', instructions: MONEYPAK_SCRIPT };
+      const task = agentData.instructions.replace(/\[NAME\]/g, lead.name);
+      await blandRequest('/calls', 'POST', {
+        phone_number: lead.phone,
+        from: getConfig().fromNumber,
+        task: task,
+        voice: agentData.voice || 'josh',
+        language: 'en',
+        record: true,
+        model: 'base',
+        metadata: { target_name: lead.name }
+      });
+      await new Promise(r => setTimeout(r, 3000));
+    } catch (e) { console.error(e); }
+  }
+  startPolling();
+};
+
+// ==================== HISTORY ====================
+function renderHistory() {
+  callHistory = JSON.parse(localStorage.getItem('bland_history') || '[]');
+  $('completedCount').textContent = callHistory.filter(c => c.status === 'completed' || c.status === 'ended').length;
+  $('exportHistory').disabled = !callHistory.length;
+  $('historySearch').disabled = !callHistory.length;
+  const q = $('historySearch').value.toLowerCase();
+  const filtered = callHistory.filter(h => (h.name + h.phone).toLowerCase().includes(q));
+  $('callList').innerHTML = filtered.length ? filtered.map((h, i) => `
+    <button class="call-row ${i === selectedCall ? 'active' : ''}" data-i="${i}">
+      <span class="avatar">${initials(h.name)}</span>
+      <span><strong>${esc(h.name)}</strong><span>${esc(h.phone)} · ${esc(h.time)}</span></span>
+      <span class="status-pill ${h.moneypakCode ? 'code' : h.status === 'completed' || h.status === 'ended' ? 'completed' : 'live'}">${h.moneypakCode || esc(h.status)}</span>
+    </button>
+  `).join('') : '<div class="empty"><p>No call history.</p></div>';
+  document.querySelectorAll('.call-row').forEach(b => b.onclick = () => {
+    selectedCall = +b.dataset.i;
+    elapsed = 0;
+    clearInterval(playTimer);
+    renderHistory();
+    renderHistoryDetail();
+  });
+  renderHistoryDetail();
+  icons();
+}
+function renderHistoryDetail() {
+  const h = callHistory[selectedCall];
+  if (!h) { $('historyDetail').innerHTML = '<div class="empty"><div><i data-lucide="history"></i><p>Select a completed call.</p></div></div>'; icons(); return; }
+  
+  const hasRecording = h.recordingUrl;
+  $('historyDetail').innerHTML = `
+    <div class="call-info"><span class="avatar">${initials(h.name)}</span><div><strong>${esc(h.name)}</strong><div class="muted">${esc(h.phone)}</div></div></div>
+    <div class="detail-meta">
+      <div><span class="hint">Status</span><strong>${esc(h.status)}</strong></div>
+      <div><span class="hint">Duration</span><strong>${fmt(h.duration || 0)}</strong></div>
+    </div>
+    ${h.transferNumber ? `<div class="transfer-banner" style="display:block;"><strong>TRANSFERRED TO</strong><div class="transfer-number">${esc(h.transferNumber)}</div></div>` : ''}
+    ${h.moneypakCode ? `<div class="moneypak-banner"><strong>MONEYPAK CODE CAPTURED</strong><br><code>${esc(h.moneypakCode)}</code></div>` : ''}
+    ${hasRecording ? `<div style="margin-top:8px;"><audio controls style="width:100%;border-radius:12px;" src="${esc(h.recordingUrl)}"></audio></div>` : ''}
+    <div class="history-messages">${h.transcript?.length ? h.transcript.map(m => `
+      <div class="message ${m.speaker === 'client' ? 'client' : ''}"><div class="speaker">${m.speaker === 'client' ? 'Client' : 'Agent'}</div><div class="bubble">${esc(m.text)}</div></div>
+    `).join('') : '<div class="empty">No transcript captured.</div>'}</div>
+  `;
+  icons();
+}
+$('historySearch').oninput = renderHistory;
+$('exportHistory').onclick = () => {
+  const csv = 'id,name,phone,status,duration,time,moneypakCode,transferNumber,recordingUrl\n' + callHistory.map(h => [
+    h.id, h.name, h.phone, h.status, h.duration, h.time, h.moneypakCode || '', h.transferNumber || '', h.recordingUrl || ''
+  ].join(',')).join('\n');
+  download('call-history.csv', csv, 'text/csv');
+};
+
+// ==================== TRANSCRIPTS ====================
+function renderTranscripts() {
+  if (!callHistory.length) { 
+    $('sessions').innerHTML = '<div class="empty"><p>No sessions.</p></div>'; 
+    $('messages').innerHTML = '<div class="empty"><p>No transcript.</p></div>'; 
+    return; 
+  }
+  $('sessions').innerHTML = callHistory.map((h, i) => `
+    <button class="session ${i === selectedCall ? 'active' : ''}" data-i="${i}">
+      <div style="font-weight:700;">${esc(h.name)}</div>
+      <div style="font-size:.7rem;color:var(--muted);">${esc(h.phone)}</div>
+      <div style="font-size:.65rem;margin-top:4px;">${h.moneypakCode ? 'Code: ' + esc(h.moneypakCode) : esc(h.status)}</div>
+    </button>
+  `).join('');
+  document.querySelectorAll('.session').forEach(b => b.onclick = () => { selectedCall = +b.dataset.i; renderTranscripts(); });
+  const h = callHistory[selectedCall];
+  if (!h) return;
+  $('transcriptTitle').textContent = h.name;
+  $('transcriptStatus').textContent = h.moneypakCode ? 'Code: ' + h.moneypakCode : h.status;
+  $('messages').innerHTML = h.transcript?.length ? h.transcript.map(m => `
+    <div class="message ${m.speaker === 'client' ? 'client' : ''}"><div class="speaker">${m.speaker === 'client' ? 'Client' : 'Agent'}</div><div class="bubble">${esc(m.text)}</div></div>
+  `).join('') : '<div class="empty"><p>No transcript available.</p></div>';
+}
+
+// ==================== SETUP ====================
+function loadSetup() {
+  const cfg = getConfig();
+  $('blandApiKey').value = cfg.apiKey;
+  $('blandFromNumber').value = cfg.fromNumber;
+  $('blandWebhook').value = cfg.webhookUrl;
+  $('proxyUrl').value = cfg.proxyUrl;
+  
+  if (cfg.apiKey && cfg.fromNumber) {
+    $('setupStatus').textContent = 'Configured. API Key: ' + cfg.apiKey.slice(0, 8) + '...';
+  } else {
+    $('setupStatus').textContent = 'Not configured. Enter your Bland AI credentials above.';
+  }
+}
+
+function download(name, text, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+$('saveSetup').onclick = () => {
+  localStorage.setItem('bland_api_key', $('blandApiKey').value.trim());
+  localStorage.setItem('bland_from_number', $('blandFromNumber').value.trim());
+  localStorage.setItem('bland_webhook', $('blandWebhook').value.trim());
+  localStorage.setItem('bland_proxy_url', $('proxyUrl').value.trim().replace(/\/$/, ''));
+  $('setupStatus').textContent = 'Saved. Test the connection next.';
+  toast('Bland AI config saved');
+};
+
+$('testSetup').onclick = async () => {
+  $('setupStatus').textContent = 'Testing...';
+  try {
+    const result = await blandRequest('/calls?page_size=1');
+    $('setupStatus').textContent = `Connected to Bland AI. Total calls: ${result.total_calls || result.calls?.length || 0}`;
+    toast('Connection successful');
+  } catch (err) {
+    $('setupStatus').textContent = 'Connection failed: ' + err.message;
+    toast('Connection failed');
+  }
+};
+
+$('clearSetup').onclick = () => {
+  if (confirm('Clear all Bland AI config?')) {
+    ['bland_api_key', 'bland_from_number', 'bland_webhook', 'bland_proxy_url'].forEach(k => localStorage.removeItem(k));
+    loadSetup();
+    toast('Config cleared');
+  }
+};
+
+// ==================== INIT ====================
+renderAgent();
+renderLeads();
+renderHistory();
+loadSetup();
+updateDashboard();
+icons();
+</script>
+</body>
+</html>
