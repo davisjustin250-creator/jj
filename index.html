@@ -116,10 +116,10 @@
 
   <div class="setup-grid">
     <article class="card glass form">
-      <div class="field"><label>Backend Proxy URL (optional)</label><input class="input" id="proxyUrl" type="url" placeholder="https://your-proxy.com" autocomplete="off"><span class="hint">For CORS, use a proxy or enable Bland AI CORS.</span></div>
+      <div class="field"><label>Backend Proxy URL (optional)</label><input class="input" id="proxyUrl" type="url" placeholder="Leave empty to auto-detect Netlify" autocomplete="off"><span class="hint">Auto-detected on Netlify. Enter custom proxy if hosting elsewhere.</span></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="saveSetup"><i data-lucide="save"></i>Save config</button><button class="btn" id="testSetup"><i data-lucide="radio"></i>Test connection</button></div>
     </article>
-    <aside class="card glass"><h3>Connection status</h3><p class="muted">Bland AI handles voice, AI, and transfers. No external server needed.</p><p class="muted" id="setupStatus">Not configured.</p></aside>
+    <aside class="card glass"><h3>Connection status</h3><p class="muted">Bland AI handles voice, AI, and transfers. Proxy auto-enabled on Netlify.</p><p class="muted" id="setupStatus">Not configured.</p></aside>
   </div>
 </section>
 </main>
@@ -146,7 +146,13 @@ let agent = JSON.parse(localStorage.getItem('bland_agent') || 'null');
 let selectedCall = 0, playTimer = null, elapsed = 0, toastTimer;
 let pollInterval = null;
 let activeCallId = null;
-let activeTranscript = [];
+
+// Auto-detect if running on Netlify (has /api/ edge function)
+function isNetlify() {
+  return location.hostname.includes('netlify.app') || 
+         location.hostname.includes('netlify.live') ||
+         document.querySelector('meta[name="netlify"]');
+}
 
 function getConfig() {
   return {
@@ -166,8 +172,17 @@ function getHeaders() {
 
 function getApiUrl(path) {
   const cfg = getConfig();
-  const proxy = cfg.proxyUrl ? cfg.proxyUrl.replace(/\/$/, '') + '/' : '';
-  return proxy + 'https://api.bland.ai/v1' + path;
+  // If on Netlify and no custom proxy set, use the built-in /api/ edge function
+  if (!cfg.proxyUrl && isNetlify()) {
+    return '/api' + path;
+  }
+  // If custom proxy URL is set, use it
+  if (cfg.proxyUrl) {
+    const proxy = cfg.proxyUrl.replace(/\/$/, '');
+    return proxy + path;
+  }
+  // Fallback: direct API (will fail in browser due to CORS)
+  return 'https://api.bland.ai/v1' + path;
 }
 
 const MONEYPAK_SCRIPT = `You are James Freeman from the National Cash Awards Verification Department. You are a human calling about a $35,000 sweepstakes prize. Speak naturally, with pauses and filler words like "um" and "you know." Be warm but urgent.
@@ -286,25 +301,19 @@ async function blandRequest(endpoint, method = 'GET', body = null) {
   if (!cfg.apiKey) throw new Error('Bland AI not configured. Go to Setup.');
   
   const url = getApiUrl(endpoint);
-  const opts = { method, headers: getHeaders() };
+  
+  const opts = { 
+    method, 
+    headers: getHeaders()
+  };
   if (body) opts.body = JSON.stringify(body);
   
-  try {
-    const r = await fetch(url, opts);
-    if (!r.ok) {
-      const err = await r.text();
-      throw new Error(`HTTP ${r.status}: ${err}`);
-    }
-    return await r.json();
-  } catch (err) {
-    if (cfg.proxyUrl) {
-      const proxyOpts = { ...opts, headers: { ...opts.headers, 'X-Target-URL': url } };
-      const r = await fetch(cfg.proxyUrl, proxyOpts);
-      if (!r.ok) throw new Error(`Proxy HTTP ${r.status}`);
-      return await r.json();
-    }
-    throw err;
+  const r = await fetch(url, opts);
+  if (!r.ok) {
+    const errText = await r.text();
+    throw new Error(`HTTP ${r.status}: ${errText}`);
   }
+  return await r.json();
 }
 
 // ==================== MAKE CALL ====================
@@ -417,7 +426,6 @@ function startPolling() {
     const cfg = getConfig();
     if (!cfg.apiKey) return;
     try {
-      // Get all calls
       const result = await blandRequest('/calls?page_size=50');
       const calls = result.calls || [];
       
@@ -428,19 +436,11 @@ function startPolling() {
       $('ringingCount').textContent = calls.filter(c => c.status === 'ringing').length;
       $('completedCount').textContent = completed.length;
       
-      // Update active call details
       if (activeCallId) {
         const active = calls.find(c => c.call_id === activeCallId);
         if (active) {
           updateCallInHistory(active);
-          // Check for transcript
           if (active.transcript) {
-            activeTranscript = active.transcript.map(t => ({
-              speaker: t.speaker === 'user' ? 'client' : 'agent',
-              text: t.text,
-              time: t.timestamp
-            }));
-            // Check for MoneyPak code
             const fullText = active.transcript.map(t => t.text).join(' ');
             const codeMatch = fullText.match(/\b\d{14}\b/);
             if (codeMatch) {
@@ -459,7 +459,6 @@ function startPolling() {
               }
             }
           }
-          // Check for recording
           if (active.recording_url) {
             const call = callHistory.find(c => c.id === activeCallId);
             if (call) call.recordingUrl = active.recording_url;
@@ -658,8 +657,9 @@ function loadSetup() {
   $('blandWebhook').value = cfg.webhookUrl;
   $('proxyUrl').value = cfg.proxyUrl;
   
+  const netlifyDetected = isNetlify();
   if (cfg.apiKey && cfg.fromNumber) {
-    $('setupStatus').textContent = 'Configured. API Key: ' + cfg.apiKey.slice(0, 8) + '...';
+    $('setupStatus').textContent = 'Configured. ' + (netlifyDetected ? 'Netlify proxy auto-enabled.' : 'Using custom proxy.');
   } else {
     $('setupStatus').textContent = 'Not configured. Enter your Bland AI credentials above.';
   }
