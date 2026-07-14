@@ -1,1 +1,742 @@
-<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"> <meta name="theme-color" content="#0a0a0f"> <title>Bland AI Dialer</title> <script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script> <style> :root{--ink:#e8e8f0;--muted:#8a8a9e;--violet:#7c5cff;--coral:#ff6b6b;--mint:#4ecdc4;--danger:#ff4757;--surface:rgba(255,255,255,0.03);--line:rgba(255,255,255,0.08);--ease:cubic-bezier(.16,1,.3,1);--shadow:0 22px 60px rgba(0,0,0,0.4)}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;color:var(--ink);background:#0a0a0f}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{opacity:.46;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--violet);outline-offset:2px}.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 20% 20%,#1a1a2e 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,#16213e 0%,transparent 50%),#0a0a0f}.bg::before,.bg::after{content:"";position:absolute;border-radius:50%;filter:blur(80px);opacity:.3}.bg::before{width:50vw;height:50vw;left:-10vw;top:-10vw;background:#7c5cff}.bg::after{width:40vw;height:40vw;right:-5vw;bottom:-15vw;background:#ff6b6b}.app{position:relative;z-index:1;width:min(100%,1180px);margin:auto;min-height:100vh}.glass{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}main{padding:clamp(24px,4vw,46px) clamp(14px,4vw,46px) 128px}.view{display:none}.view.active{display:block;animation:enter .34s var(--ease)}@keyframes enter{from{opacity:0;transform:translateY(8px)}}.head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:26px}.head h1{font-size:clamp(2.1rem,5vw,3rem);line-height:1;letter-spacing:-.055em;margin:0}.head p{margin:9px 0 0;color:var(--muted);max-width:65ch}.card{border-radius:24px;padding:24px}.card h2,.card h3{margin:0;letter-spacing:-.025em}.btn,.input{background:rgba(255,255,255,0.05);border:1px solid var(--line);transition:all .14s var(--ease)}.btn{min-height:46px;border-radius:14px;padding:0 16px;font-weight:760;display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--ink)}.btn:hover:not(:disabled){background:rgba(255,255,255,0.1);transform:translateY(-1px)}.btn:active:not(:disabled){transform:scale(.98)}.btn svg{width:18px}.btn.primary{background:linear-gradient(145deg,var(--violet),#5a3fd6);color:#fff;border-color:transparent}.btn.danger{background:var(--danger);color:#fff;border-color:transparent}.input{width:100%;height:50px;border-radius:13px;padding:0 14px;background:rgba(255,255,255,0.03);border:1px solid var(--line);color:var(--ink)}.input::placeholder{color:var(--muted)}textarea.input{height:120px;padding:12px;resize:vertical}.field{display:grid;gap:7px}.field label{font-size:.8rem;font-weight:760;color:var(--muted)}.hint{font-size:.72rem;color:var(--muted)}.muted{color:var(--muted)}.empty{min-height:180px;display:grid;place-items:center;text-align:center;color:var(--muted);padding:24px}.empty svg{width:32px;height:32px;margin-bottom:8px}.empty p{margin:4px 0}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:20px}.metric{min-height:132px}.metric-label{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:.86rem;font-weight:680}.metric-label svg{width:18px}.metric strong{display:block;font-size:2.2rem;margin-top:17px;font-variant-numeric:tabular-nums;color:var(--ink)}.dial-grid,.setup-grid{display:grid;grid-template-columns:1fr .64fr;gap:20px}.form{display:grid;gap:17px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.full{grid-column:1/-1}.call-button{width:100%}.live-call{display:grid;align-content:start;gap:18px}.call-info{display:flex;align-items:center;gap:12px}.avatar{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#7c5cff,#ff6b6b);font-weight:850;color:#fff}.timer{font-size:3rem;font-weight:820;text-align:center;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:var(--violet)}.call-actions{display:flex;justify-content:center;gap:10px}.circle{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:rgba(255,255,255,0.03)}.circle.end{background:var(--danger);color:#fff}.lead-tools{display:grid;gap:18px}.batch{display:flex;gap:8px;flex-wrap:wrap}.batch button{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,0.03)}.batch button.active{background:var(--violet);color:#fff}.lead-list{margin-top:20px}.lead-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:15px;border-bottom:1px solid var(--line)}.lead-row{display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.lead-row strong,.lead-row span{display:block}.lead-row span{font-size:.76rem;color:var(--muted)}.status-pill{font-size:.68rem;padding:5px 8px;border-radius:999px;background:rgba(78,205,196,0.15);color:var(--mint)}.status-pill.live{background:rgba(255,71,87,0.15);color:var(--danger);animation:pulse-live 1.5s ease infinite}@keyframes pulse-live{0%,100%{opacity:1}50%{opacity:.5}}.status-pill.code{background:linear-gradient(145deg,rgba(78,205,196,0.3),rgba(78,205,196,0.15));color:var(--mint)}.status-pill.completed{background:rgba(124,92,255,0.15);color:var(--violet)}.status-pill.ended{background:rgba(255,71,87,0.15);color:var(--danger)}.chat-layout{display:grid;grid-template-columns:250px 1fr;gap:18px;height:590px}.sessions{overflow:auto}.session{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:14px 8px;text-align:left;color:var(--muted)}.session.active{color:var(--violet);font-weight:760}.conversation{display:grid;grid-template-rows:auto 1fr auto;padding:0;overflow:hidden}.chathead{padding:17px 20px;border-bottom:1px solid var(--line)}.messages{padding:20px;overflow:auto;display:flex;flex-direction:column;gap:12px}.message{max-width:82%}.message.client{align-self:flex-end}.speaker{font-size:.64rem;text-transform:uppercase;color:var(--muted);font-weight:850;margin:0 0 4px 5px}.bubble{padding:11px 14px;border-radius:16px;background:rgba(255,255,255,0.05);border:1px solid var(--line);color:var(--ink)}.client .bubble{background:linear-gradient(145deg,rgba(124,92,255,0.3),rgba(255,107,107,0.2))}.history-layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;min-height:650px}.calls,.detail{padding:18px}.call-row{width:100%;display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:12px 7px;border:1px solid transparent;border-radius:15px;background:transparent;text-align:left;color:var(--ink)}.call-row.active,.call-row:hover{background:rgba(255,255,255,0.03);border-color:var(--line)}.call-row strong,.call-row span{display:block}.call-row span{font-size:.7rem;color:var(--muted)}.detail{display:grid;gap:18px;align-content:start}.detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-meta div{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,0.02)}.player{height:56px;border-radius:15px;background:rgba(0,0,0,0.5);color:var(--ink);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:0 14px}.player button{border:0;background:transparent;color:inherit}.track{height:5px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden}.progress{width:0;height:100%;background:var(--violet)}.history-messages{border:1px solid var(--line);border-radius:17px;padding:14px;max-height:360px;overflow:auto}.bottomnav{position:fixed;z-index:40;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 24px),920px);height:76px;border-radius:25px;padding:8px;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;background:rgba(10,10,15,0.8);border:1px solid var(--line);backdrop-filter:blur(20px)}.bottomnav::-webkit-scrollbar{display:none}.tab{height:58px;min-width:74px;flex:1;border:1px solid transparent;border-radius:19px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.64rem;font-weight:720}.tab svg{width:20px;height:20px}.tab.active{background:linear-gradient(145deg,var(--violet),#5a3fd6);color:#fff;box-shadow:0 9px 22px rgba(124,92,255,0.3)}.toast{position:fixed;left:50%;bottom:102px;transform:translate(-50%,15px);padding:12px 16px;border-radius:14px;background:rgba(20,20,30,0.95);border:1px solid var(--line);color:var(--ink);opacity:0;pointer-events:none;z-index:50;transition:.2s var(--ease)}.toast.show{opacity:1;transform:translate(-50%,0)}.live-indicator{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:14px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);margin-bottom:16px}.live-dot{width:10px;height:10px;border-radius:50%;background:var(--danger);animation:blink 1s ease infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}.moneypak-banner{padding:16px;border-radius:16px;background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.3);margin-top:12px}.moneypak-banner strong{color:var(--mint);font-size:1.1rem}.moneypak-banner code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1.4rem;color:var(--mint);background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:8px;display:inline-block;margin-top:6px}.transfer-banner{padding:14px;border-radius:14px;background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);margin-top:12px;display:none}.transfer-banner strong{color:#f39c12;font-size:1rem}.transfer-banner .transfer-number{font-family:ui-monospace,monospace;font-size:1.2rem;color:#f39c12;margin-top:6px}.hidden{display:none!important}.agent-simple{max-width:600px;margin:0 auto}@media(max-width:800px){.metrics,.dial-grid,.setup-grid,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.history-layout{grid-template-columns:1fr}.calls{display:flex;overflow:auto;gap:6px}.call-row{min-width:220px}.chat-layout{display:block;height:auto}.sessions{display:flex;overflow:auto;margin-bottom:12px}.session{min-width:180px}.conversation{height:550px}}@media(max-width:520px){main{padding-top:24px}.head{display:block}.head>.btn{width:100%;margin-top:16px}.card,.detail{padding:18px}.tab{min-width:58px}.tab span{display:none}.bottomnav{height:68px}.message{max-width:90%}.detail-meta{grid-template-columns:1fr}} </style> </head> <body> <div class="bg"></div> <div class="app"> <main> <!-- DASHBOARD --> <section class="view active" id="dashboard"> <header class="head"><div><h1>Bland AI Dialer</h1><p>AI-powered calling with real-time transfer.</p></div><button class="btn primary" data-go="dialer"><i data-lucide="phone"></i>New call</button></header> <div class="metrics"> <article class="card glass metric"><div class="metric-label"><i data-lucide="phone-call"></i>Live calls</div><strong id="liveCount">0</strong></article> <article class="card glass metric"><div class="metric-label"><i data-lucide="phone-ringing"></i>Ringing</div><strong id="ringingCount">0</strong></article> <article class="card glass metric"><div class="metric-label"><i data-lucide="clock-3"></i>Completed</div><strong id="completedCount">0</strong></article> </div> <article class="card glass"><h3>Live calls</h3><div id="dashboardLive"><div class="empty"><div><i data-lucide="phone-off"></i><p>No calls right now.</p><p>Configure Bland AI, then start a call.</p></div></div></div></article> </section> <!-- DIALER --> <section class="view" id="dialer"> <header class="head"><div><h1>AI Dialer</h1><p>Bland AI voice with live transfer.</p></div></header> <div class="dial-grid"> <article class="card glass form"> <h3>Launch AI Call</h3> <div class="field"><label>Target name</label><input class="input" id="targetName" placeholder="Full name" autocomplete="off"></div> <div class="form-grid"> <div class="field full"><label>Phone number</label><input class="input" id="phoneNumber" type="tel" placeholder="+1..." autocomplete="off"></div> </div> <div class="field"><label>Transfer number (optional)</label><input class="input" id="transferNumber" type="tel" placeholder="+1... (transfers target to this number)" autocomplete="off"></div> <button class="btn primary call-button" id="callButton"><i data-lucide="phone"></i>Launch AI Call</button> </article> <article class="card glass live-call" id="liveCall"> <h3>Live AI Call</h3> <div id="liveCallContent"><div class="empty"><div><i data-lucide="radio"></i><p>Waiting for a call.</p></div></div></div> </article> </div> </section> <!-- LEADS --> <section class="view" id="leads"> <header class="head"><div><h1>Leads</h1><p>Import targets and batch-dial with AI.</p></div></header> <article class="card glass lead-tools"> <div><strong>Batch size</strong><div class="batch" id="batch"><button class="active">1</button><button>5</button><button>10</button><button>20</button><button>50</button></div></div> <div style="display:flex;gap:8px;flex-wrap:wrap;"> <button class="btn" id="uploadCsvButton"><i data-lucide="file-spreadsheet"></i>Import CSV</button> <button class="btn" id="uploadPdfButton"><i data-lucide="file-text"></i>Import PDF</button> <input id="csvFile" type="file" accept=".csv" hidden> <input id="pdfFile" type="file" accept=".pdf" hidden> </div> <button class="btn primary" id="startCampaign" disabled><i data-lucide="play"></i>Start AI Campaign</button> </article> <article class="card glass lead-list"> <div class="lead-head"><strong id="leadCount">0 leads</strong><button class="btn danger" id="clearLeads" disabled>Clear all</button></div> <div id="leadRows"><div class="empty"><div><i data-lucide="users"></i><p>No leads imported.</p></div></div></div> </article> </section> <!-- HISTORY --> <section class="view" id="history"> <header class="head"><div><h1>Call History</h1><p>Recordings, transcripts, and captured codes.</p></div><button class="btn" id="exportHistory" disabled><i data-lucide="download"></i>Export</button></header> <div class="history-layout"> <aside class="calls glass"><input class="input" id="historySearch" placeholder="Search calls" disabled><div id="callList"><div class="empty"><p>No call history.</p></div></div></aside> <section class="detail glass" id="historyDetail"><div class="empty"><div><i data-lucide="history"></i><p>Select a completed call.</p></div></div></section> </div> </section> <!-- TRANSCRIPT --> <section class="view" id="transcript"> <header class="head"><div><h1>Live Transcript</h1><p>Real-time AI conversation feed.</p></div></header> <div class="chat-layout"> <aside class="card glass sessions" id="sessions"><div class="empty"><p>No sessions.</p></div></aside> <section class="card glass conversation"> <div class="chathead"><strong id="transcriptTitle">No call selected</strong><span id="transcriptStatus" class="muted" style="font-size:.75rem;margin-left:8px;"></span></div> <div class="messages" id="messages"><div class="empty"><p>No transcript.</p></div></div> </section> </div> </section> <!-- AGENT --> <section class="view" id="agent"> <header class="head"><div><h1>AI Agent</h1><p>Select your Bland AI agent.</p></div></header> <div class="agent-simple"> <article class="card glass form"> <div class="field"><label>Bland AI Agent ID</label><input class="input" id="blandAgentId" placeholder="Paste your Bland AI agent ID here" autocomplete="off"></div> <button class="btn primary" id="saveAgent" style="width:100%;"><i data-lucide="save"></i>Save agent</button> </article> </div> </section> <!-- SETUP --> <section class="view" id="setup"> <header class="head"><div><h1>Settings</h1><p>Configure your credentials. Everything stays local.</p></div><button class="btn danger" id="clearSetup"><i data-lucide="trash-2"></i>Clear</button></header> <div class="setup-grid"> <article class="card glass form"> <div class="field"><label>Bland AI API Key</label><input class="input" id="blandApiKey" type="password" placeholder="Your Bland AI API key"></div> <div class="field"><label>From Number</label><input class="input" id="blandFromNumber" type="tel" placeholder="+1234567890"></div> <div class="field"><label>OpenAI API Key <span class="hint">(optional)</span></label><input class="input" id="openaiApiKey" type="password" placeholder="Your OpenAI API key (optional)"></div> <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="saveSetup"><i data-lucide="save"></i>Save config</button><button class="btn" id="testSetup"><i data-lucide="radio"></i>Test connection</button></div> </article> <aside class="card glass"><h3>Connection status</h3><p class="muted">Enter your Bland AI API key and from number above. OpenAI key is optional for enhanced features.</p><p class="muted" id="setupStatus">Not configured.</p></aside> </div> </section> </main> <nav class="bottomnav" aria-label="Main navigation"> <button class="tab active" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button> <button class="tab" data-view="dialer"><i data-lucide="phone"></i><span>Dialer</span></button> <button class="tab" data-view="leads"><i data-lucide="users"></i><span>Leads</span></button> <button class="tab" data-view="history"><i data-lucide="history"></i><span>History</span></button> <button class="tab" data-view="transcript"><i data-lucide="messages-square"></i><span>Transcript</span></button> <button class="tab" data-view="agent"><i data-lucide="bot"></i><span>Agent</span></button> <button class="tab" data-view="setup"><i data-lucide="settings"></i><span>Setup</span></button> </nav> </div> <div class="toast glass" id="toast"></div> <script> const $ = id => document.getElementById(id); let leads = JSON.parse(localStorage.getItem('bland_leads') || '[]'); let callHistory = JSON.parse(localStorage.getItem('bland_history') || '[]'); let agentId = localStorage.getItem('bland_agent_id') || ''; let selectedCall = 0, toastTimer; let pollInterval = null; let activeCallId = null; const DEFAULT_SCRIPT = `You are a human calling {{name}}. Speak naturally with pauses, filler words like "um" and "you know." Be warm, confident, and persuasive. Never say you are AI, a bot, or automated. Use slight imperfections in speech. Adapt to the conversation flow. If the target asks for proof or verification, provide confident, specific details. If they refuse, be polite and end the call. Extract any important information they provide. If a transfer number is configured, transfer them after achieving the primary goal.`; function getConfig() { return { apiKey: localStorage.getItem('bland_api_key') || '', fromNumber: localStorage.getItem('bland_from_number') || '', openaiKey: localStorage.getItem('openai_api_key') || '' }; } function getHeaders() { return { 'Authorization': getConfig().apiKey, 'Content-Type': 'application/json' }; } function getApiUrl(path) { return 'https://api.bland.ai/v1' + path; } function icons() { lucide.createIcons(); } function toast(text) { $('toast').textContent = text; $('toast').classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('show'), 3200); } function esc(s) { return String(s ?? '').replace(/[<>&]/g, x => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[x])); } function initials(n) { return String(n || '?').split(/\s+/).map(x => x[0]).join('').slice(0, 2).toUpperCase(); } function fmt(s) { return `${String(s / 60 | 0).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; } // ==================== EXTRACTION ENGINE ==================== function extractPhoneNumbers(text) { const patterns = [ /\+?1?\s*[-.]?\s*\(?\d{3}\)?\s*[-.]?\s*\d{3}\s*[-.]?\s*\d{4}/g, /\+?1?\s*\d{3}\s*\d{3}\s*\d{4}/g, /\(\d{3}\)\s*\d{3}[-.]?\d{4}/g, /\d{3}[-.]\d{3}[-.]\d{4}/g, /\+\d{1,3}\s*\d{1,4}\s*\d{1,4}\s*\d{1,4}/g ]; const found = new Set(); for (const p of patterns) { const matches = text.match(p); if (matches) matches.forEach(m => { const digits = m.replace(/\D/g, ''); const normalized = digits.length === 10 ? '+1' + digits : digits.length === 11 && digits[0] === '1' ? '+' + digits : '+' + digits; found.add(normalized); }); } return Array.from(found); } function extractNames(text) { const lines = text.split(/\n/).map(l => l.trim()).filter(Boolean); const names = []; const namePattern = /^[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+$/; for (const line of lines) { if (namePattern.test(line) && line.length < 40 && !/Inc\.|LLC|Corp|Ltd|@|www|http|Street|Avenue|Road|Drive|Lane|Boulevard|Blvd|Ave|St|Rd|Dr/.test(line)) { names.push(line); } } return names; } function extractAddresses(text) { const patterns = [ /\d+\s+(?:[A-Z][a-zA-Z]*\.?\s*)+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Lane|Ln|Boulevard|Blvd|Court|Ct|Circle|Cir|Way|Trail|Trl|Parkway|Pkwy|Highway|Hwy)\s*,?\s*(?:[A-Z][a-zA-Z]*\.?\s*)*,?\s*[A-Z]{2}\s*\d{5}(?:-\d{4})?/gi, /\d+\s+(?:[A-Z][a-zA-Z]*\.?\s*)+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Lane|Ln|Boulevard|Blvd)\s*,?\s*[A-Z]{2}\s*\d{5}/gi, /\d+\s+[A-Z][a-zA-Z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Lane|Ln)\s+[A-Z][a-zA-Z]+,?\s*[A-Z]{2}\s*\d{5}/gi ]; const found = new Set(); for (const p of patterns) { const matches = text.match(p); if (matches) matches.forEach(m => found.add(m.replace(/\s+/g, ' ').trim())); } return Array.from(found); } function normalizePhone(raw) { const digits = raw.replace(/\D/g, ''); if (digits.length === 10) return '+1' + digits; if (digits.length === 11 && digits[0] === '1') return '+' + digits; if (digits.length > 10) return '+' + digits; return raw; } // ==================== PDF PARSING ==================== async function parsePDF(file) { const arrayBuffer = await file.arrayBuffer(); const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise; let fullText = ''; for (let i = 1; i <= pdf.numPages; i++) { const page = await pdf.getPage(i); const content = await page.getTextContent(); fullText += content.items.map(item => item.str).join(' ') + '\n'; } return fullText; } function parseLeadsFromText(text) { const phones = extractPhoneNumbers(text); const names = extractNames(text); const addresses = extractAddresses(text); const parsed = []; const lines = text.split(/\n/).map(l => l.trim()).filter(Boolean); for (let i = 0; i < lines.length; i++) { const line = lines[i]; const phoneInLine = extractPhoneNumbers(line)[0]; if (phoneInLine) { let name = ''; let address = ''; for (let j = Math.max(0, i - 8); j < i; j++) { const candidate = lines[j].trim(); if (/^[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+$/.test(candidate) && candidate.length < 40 && !/Street|Avenue|Road|St|Ave|Rd|@|www/.test(candidate)) { name = candidate; break; } } if (!name && names.length) name = names.shift(); const nearbyText = lines.slice(Math.max(0, i - 3), Math.min(lines.length, i + 4)).join(' '); const addrMatch = extractAddresses(nearbyText)[0]; if (addrMatch) address = addrMatch; else if (addresses.length) address = addresses.shift(); parsed.push({ name: name || 'Unknown', phone: normalizePhone(phoneInLine), address: address || '' }); } } if (!parsed.length && phones.length) { phones.forEach((p, i) => parsed.push({ name: names[i] || 'Unknown', phone: normalizePhone(p), address: addresses[i] || '' })); } return parsed; } // ==================== NAVIGATION ==================== function go(id) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === id)); $(id).classList.add('active'); if (id === 'history') renderHistory(); if (id === 'transcript') renderTranscripts(); if (id === 'agent') renderAgent(); if (id === 'setup') loadSetup(); if (id === 'dashboard') updateDashboard(); } document.querySelectorAll('.tab').forEach(t => t.onclick = () => go(t.dataset.view)); document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(b.dataset.go)); function renderAgent() { $('blandAgentId').value = agentId; } $('saveAgent').onclick = () => { const id = $('blandAgentId').value.trim(); if (!id) return toast('Enter a Bland AI agent ID'); agentId = id; localStorage.setItem('bland_agent_id', agentId); toast('Agent saved'); }; async function blandRequest(endpoint, method = 'GET', body = null) { const cfg = getConfig(); if (!cfg.apiKey) throw new Error('Bland AI not configured. Go to Setup.'); const url = getApiUrl(endpoint); const opts = { method, headers: getHeaders() }; if (body) opts.body = JSON.stringify(body); const r = await fetch(url, opts); if (!r.ok) { const errText = await r.text(); throw new Error(`HTTP ${r.status}: ${errText}`); } return await r.json(); } function buildTask(name, transferNum) { let task = DEFAULT_SCRIPT; task = task.replace(/\{\{name\}\}/g, name); if (transferNum) { task += `\n\nTRANSFER NUMBER: ${transferNum}. If the target agrees or needs escalation, transfer to this number immediately.`; } return task; } $('callButton').onclick = async () => { const cfg = getConfig(); const name = $('targetName').value.trim(); const phone = $('phoneNumber').value.trim(); const transferNum = $('transferNumber').value.trim(); if (!cfg.apiKey || !cfg.fromNumber) { go('setup'); return toast('Configure Bland AI first'); } if (!name || !phone) return toast('Enter target name and phone number'); toast('Initiating Bland AI call...'); try { const body = { phone_number: phone, from: cfg.fromNumber, task: buildTask(name, transferNum), voice: 'josh', language: 'en', record: true, model: 'base', transfer_to_phone_number: transferNum || undefined, metadata: { target_name: name, transfer_number: transferNum || '' } }; if (agentId) { body.agent_id = agentId; delete body.task; delete body.voice; } const result = await blandRequest('/calls', 'POST', body); activeCallId = result.call_id; toast('Call initiated: ' + result.call_id); startPolling(); renderLiveCall(result.call_id, name, phone, transferNum); const call = { id: result.call_id, name: name, phone: phone, status: 'initiated', duration: 0, time: new Date().toLocaleString(), transcript: [], moneypakCode: null, transferNumber: transferNum, recordingUrl: null }; callHistory.unshift(call); localStorage.setItem('bland_history', JSON.stringify(callHistory)); } catch (err) { toast('Call failed: ' + err.message); console.error(err); } }; function renderLiveCall(id, name, phone, transferNum) { let transferHtml = ''; if (transferNum) { transferHtml = `<div class="transfer-banner" style="display:block;"> <strong>TRANSFER CONFIGURED</strong> <div class="transfer-number">${esc(transferNum)}</div> </div>`; } $('liveCallContent').innerHTML = ` <div class="live-indicator"><div class="live-dot"></div><strong>Bland AI Live</strong></div> <div class="call-info"><span class="avatar">${initials(name)}</span><div><strong>${esc(name)}</strong><div class="muted">${esc(phone)}</div></div></div> <div class="timer" id="liveTimer">00:00</div> <div class="call-actions"> <button class="circle end" onclick="endCall('${id}')" title="End"><i data-lucide="phone-off"></i></button> </div> ${transferHtml} <div class="moneypak-banner" id="moneypakBanner" style="display:none;"> <strong>CODE CAPTURED</strong><br> <code id="moneypakCode">----</code> </div> <div style="margin-top:12px;font-size:.78rem;color:var(--muted);">Call ID: ${esc(id)}</div> `; icons(); let sec = 0; window.liveTimerInterval = setInterval(() => { sec++; $('liveTimer').textContent = fmt(sec); }, 1000); } async function endCall(id) { clearInterval(window.liveTimerInterval); try { await blandRequest('/calls/' + id + '/end', 'POST'); } catch (e) {} $('liveCallContent').innerHTML = '<div class="empty"><div><i data-lucide="radio"></i><p>Call ended.</p></div></div>'; icons(); stopPolling(); renderHistory(); } function startPolling() { if (pollInterval) return; pollInterval = setInterval(async () => { const cfg = getConfig(); if (!cfg.apiKey) return; try { const result = await blandRequest('/calls?page_size=50'); const calls = result.calls || []; const live = calls.filter(c => c.status === 'in_progress' || c.status === 'ringing'); const completed = calls.filter(c => c.status === 'completed' || c.status === 'ended'); $('liveCount').textContent = live.length; $('ringingCount').textContent = calls.filter(c => c.status === 'ringing').length; $('completedCount').textContent = completed.length; if (activeCallId) { const active = calls.find(c => c.call_id === activeCallId); if (active) { updateCallInHistory(active); if (active.transcript) { const fullText = active.transcript.map(t => t.text).join(' '); const codeMatch = fullText.match(/\b\d{14}\b/); if (codeMatch) { const code = codeMatch[0]; const call = callHistory.find(c => c.id === activeCallId); if (call && !call.moneypakCode) { call.moneypakCode = code; localStorage.setItem('bland_history', JSON.stringify(callHistory)); const banner = $('moneypakBanner'); const codeEl = $('moneypakCode'); if (banner && codeEl) { banner.style.display = 'block'; codeEl.textContent = code; } toast('Code captured: ' + code); } } } if (active.recording_url) { const call = callHistory.find(c => c.id === activeCallId); if (call) call.recordingUrl = active.recording_url; } } } updateDashboard(); } catch (e) {} }, 5000); } function stopPolling() { clearInterval(pollInterval); pollInterval = null; } function updateCallInHistory(activeCall) { const idx = callHistory.findIndex(c => c.id === activeCall.call_id); if (idx === -1) return; const call = callHistory[idx]; call.status = activeCall.status; call.duration = activeCall.duration || call.duration; if (activeCall.transcript) { call.transcript = activeCall.transcript.map(t => ({ speaker: t.speaker === 'user' ? 'client' : 'agent', text: t.text, time: t.timestamp })); } if (activeCall.recording_url) call.recordingUrl = activeCall.recording_url; localStorage.setItem('bland_history', JSON.stringify(callHistory)); } function updateDashboard() { const live = callHistory.filter(c => c.status === 'in_progress' || c.status === 'ringing' || c.status === 'initiated'); if (live.length) { $('dashboardLive').innerHTML = live.map(c => ` <div class="lead-row" style="border-bottom:1px solid var(--line);"> <div class="avatar">${initials(c.name)}</div> <div><strong>${esc(c.name)}</strong><span>${esc(c.phone)} · ${esc(c.status)}</span></div> <span class="status-pill ${c.status === 'in_progress' ? 'live' : ''}">${esc(c.status)}</span> </div> `).join(''); } else { $('dashboardLive').innerHTML = '<div class="empty"><div><i data-lucide="phone-off"></i><p>No calls right now.</p><p>Configure Bland AI, then start a call.</p></div></div>'; } icons(); } // ==================== LEADS ==================== function renderLeads() { $('leadCount').textContent = `${leads.length} lead${leads.length === 1 ? '' : 's'}`; $('clearLeads').disabled = !leads.length; $('startCampaign').disabled = !leads.length; $('leadRows').innerHTML = leads.length ? leads.map(l => ` <div class="lead-row"> <div class="avatar">${initials(l.name)}</div> <div><strong>${esc(l.name)}</strong><span>${esc(l.address || 'No address')} · ${esc(l.phone)}</span></div> <span class="status-pill">Ready</span> </div> `).join('') : '<div class="empty"><div><i data-lucide="users"></i><p>No leads imported.</p></div></div>'; icons(); } function addLeads(newLeads) { if (!newLeads.length) return toast('No leads found in file'); leads.push(...newLeads); localStorage.setItem('bland_leads', JSON.stringify(leads)); renderLeads(); toast(`${newLeads.length} lead${newLeads.length === 1 ? '' : 's'} imported`); } // CSV Import $('uploadCsvButton').onclick = () => $('csvFile').click(); $('csvFile').onchange = e => { const file = e.target.files[0]; if (!file) return; const r = new FileReader(); r.onload = () => { const rows = r.result.split(/\r?\n/).filter(Boolean); const headers = rows[0].split(',').map(h => h.trim().toLowerCase()); const start = /name/i.test(rows[0]) ? 1 : 0; const nameIdx = headers.findIndex(h => h.includes('name')); const phoneIdx = headers.findIndex(h => h.includes('phone') || h.includes('number') || h.includes('mobile')); const addrIdx = headers.findIndex(h => h.includes('address') || h.includes('street') || h.includes('location')); const parsed = []; for (let i = start; i < rows.length; i++) { const cols = rows[i].split(',').map(x => x.trim()); const name = nameIdx >= 0 ? cols[nameIdx] : cols[0]; const phone = phoneIdx >= 0 ? cols[phoneIdx] : cols[1]; const address = addrIdx >= 0 ? cols[addrIdx] : (cols[2] || ''); if (name && phone) parsed.push({ name, phone: normalizePhone(phone), address }); } addLeads(parsed); }; r.readAsText(file); }; // PDF Import $('uploadPdfButton').onclick = () => $('pdfFile').click(); $('pdfFile').onchange = async e => { const file = e.target.files[0]; if (!file) return; toast('Parsing PDF...'); try { const text = await parsePDF(file); const parsed = parseLeadsFromText(text); addLeads(parsed); } catch (err) { toast('PDF parse failed: ' + err.message); console.error(err); } }; $('clearLeads').onclick = () => { if (confirm('Clear all imported leads?')) { leads = []; localStorage.removeItem('bland_leads'); renderLeads(); } }; $('batch').querySelectorAll('button').forEach(b => b.onclick = () => { document.querySelectorAll('#batch button').forEach(x => x.classList.remove('active')); b.classList.add('active'); }); $('startCampaign').onclick = async () => { const batch = parseInt(document.querySelector('#batch button.active').textContent); const batchLeads = leads.slice(0, batch); toast(`Launching AI campaign for ${batchLeads.length} leads...`); for (const lead of batchLeads) { try { const body = { phone_number: lead.phone, from: getConfig().fromNumber, task: buildTask(lead.name, ''), voice: 'josh', language: 'en', record: true, model: 'base', metadata: { target_name: lead.name } }; if (agentId) { body.agent_id = agentId; delete body.task; delete body.voice; } await blandRequest('/calls', 'POST', body); await new Promise(r => setTimeout(r, 3000)); } catch (e) { console.error(e); } } startPolling(); }; function renderHistory() { callHistory = JSON.parse(localStorage.getItem('bland_history') || '[]'); $('completedCount').textContent = callHistory.filter(c => c.status === 'completed' || c.status === 'ended').length; $('exportHistory').disabled = !callHistory.length; $('historySearch').disabled = !callHistory.length; const q = $('historySearch').value.toLowerCase(); const filtered = callHistory.filter(h => (h.name + h.phone).toLowerCase().includes(q)); $('callList').innerHTML = filtered.length ? filtered.map((h, i) => ` <button class="call-row ${i === selectedCall ? 'active' : ''}" data-i="${i}"> <span class="avatar">${initials(h.name)}</span> <span><strong>${esc(h.name)}</strong><span>${esc(h.phone)} · ${esc(h.time)}</span></span> <span class="status-pill ${h.moneypakCode ? 'code' : h.status === 'completed' || h.status === 'ended' ? 'completed' : 'live'}">${h.moneypakCode || esc(h.status)}</span> </button> `).join('') : '<div class="empty"><p>No call history.</p></div>'; document.querySelectorAll('.call-row').forEach(b => b.onclick = () => { selectedCall = +b.dataset.i; clearInterval(window.liveTimerInterval); renderHistory(); renderHistoryDetail(); }); renderHistoryDetail(); icons(); } function renderHistoryDetail() { const h = callHistory[selectedCall]; if (!h) { $('historyDetail').innerHTML = '<div class="empty"><div><i data-lucide="history"></i><p>Select a completed call.</p></div></div>'; icons(); return; } const hasRecording = h.recordingUrl; $('historyDetail').innerHTML = ` <div class="call-info"><span class="avatar">${initials(h.name)}</span><div><strong>${esc(h.name)}</strong><div class="muted">${esc(h.phone)}</div></div></div> <div class="detail-meta"> <div><span class="hint">Status</span><strong>${esc(h.status)}</strong></div> <div><span class="hint">Duration</span><strong>${fmt(h.duration || 0)}</strong></div> </div> ${h.transferNumber ? `<div class="transfer-banner" style="display:block;"><strong>TRANSFERRED TO</strong><div class="transfer-number">${esc(h.transferNumber)}</div></div>` : ''} ${h.moneypakCode ? `<div class="moneypak-banner"><strong>CODE CAPTURED</strong><br><code>${esc(h.moneypakCode)}</code></div>` : ''} ${hasRecording ? `<div style="margin-top:8px;"><audio controls style="width:100%;border-radius:12px;" src="${esc(h.recordingUrl)}"></audio></div>` : ''} <div class="history-messages">${h.transcript?.length ? h.transcript.map(m => ` <div class="message ${m.speaker === 'client' ? 'client' : ''}"><div class="speaker">${m.speaker === 'client' ? 'Client' : 'Agent'}</div><div class="bubble">${esc(m.text)}</div></div> `).join('') : '<div class="empty">No transcript captured.</div>'}</div> `; icons(); } $('historySearch').oninput = renderHistory; $('exportHistory').onclick = () => { const csv = 'id,name,phone,status,duration,time,moneypakCode,transferNumber,recordingUrl\n' + callHistory.map(h => [ h.id, h.name, h.phone, h.status, h.duration, h.time, h.moneypakCode || '', h.transferNumber || '', h.recordingUrl || '' ].join(',')).join('\n'); download('call-history.csv', csv, 'text/csv'); }; function renderTranscripts() { if (!callHistory.length) { $('sessions').innerHTML = '<div class="empty"><p>No sessions.</p></div>'; $('messages').innerHTML = '<div class="empty"><p>No transcript.</p></div>'; return; } $('sessions').innerHTML = callHistory.map((h, i) => ` <button class="session ${i === selectedCall ? 'active' : ''}" data-i="${i}"> <div style="font-weight:700;">${esc(h.name)}</div> <div style="font-size:.7rem;color:var(--muted);">${esc(h.phone)}</div> <div style="font-size:.65rem;margin-top:4px;">${h.moneypakCode ? 'Code: ' + esc(h.moneypakCode) : esc(h.status)}</div> </button> `).join(''); document.querySelectorAll('.session').forEach(b => b.onclick = () => { selectedCall = +b.dataset.i; renderTranscripts(); }); const h = callHistory[selectedCall]; if (!h) return; $('transcriptTitle').textContent = h.name; $('transcriptStatus').textContent = h.moneypakCode ? 'Code: ' + h.moneypakCode : h.status; $('messages').innerHTML = h.transcript?.length ? h.transcript.map(m => ` <div class="message ${m.speaker === 'client' ? 'client' : ''}"><div class="speaker">${m.speaker === 'client' ? 'Client' : 'Agent'}</div><div class="bubble">${esc(m.text)}</div></div> `).join('') : '<div class="empty"><p>No transcript available.</p></div>'; } function loadSetup() { const cfg = getConfig(); $('blandApiKey').value = cfg.apiKey; $('blandFromNumber').value = cfg.fromNumber; $('openaiApiKey').value = cfg.openaiKey; if (cfg.apiKey && cfg.fromNumber) { $('setupStatus').textContent = 'Configured. Ready to call.'; } else { $('setupStatus').textContent = 'Not configured. Enter your Bland AI credentials above.'; } } function download(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); URL.revokeObjectURL(a.href); } $('saveSetup').onclick = () => { localStorage.setItem('bland_api_key', $('blandApiKey').value.trim()); localStorage.setItem('bland_from_number', $('blandFromNumber').value.trim()); localStorage.setItem('openai_api_key', $('openaiApiKey').value.trim()); $('setupStatus').textContent = 'Saved. Test the connection next.'; toast('Config saved'); }; $('testSetup').onclick = async () => { $('setupStatus').textContent = 'Testing...'; try { const result = await blandRequest('/calls?page_size=1'); $('setupStatus').textContent = `Connected to Bland AI. Total calls: ${result.total_calls || result.calls?.length || 0}`; toast('Connection successful'); } catch (err) { $('setupStatus').textContent = 'Connection failed: ' + err.message; toast('Connection failed'); } }; $('clearSetup').onclick = () => { if (confirm('Clear all config?')) { ['bland_api_key', 'bland_from_number', 'openai_api_key'].forEach(k => localStorage.removeItem(k)); loadSetup(); toast('Config cleared'); } }; renderAgent(); renderLeads(); renderHistory(); loadSetup(); updateDashboard(); icons(); </script> </body> </html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<title>Bland AI Dialer</title>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script>
+<style>
+:root{--ink:#e8e8f0;--muted:#8a8a9e;--violet:#7c5cff;--coral:#ff6b6b;--mint:#4ecdc4;--danger:#ff4757;--surface:rgba(255,255,255,0.03);--line:rgba(255,255,255,0.08);--ease:cubic-bezier(.16,1,.3,1);--shadow:0 22px 60px rgba(0,0,0,0.4)}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;color:var(--ink);background:#0a0a0f}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{opacity:.46;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--violet);outline-offset:2px}.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 20% 20%,#1a1a2e 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,#16213e 0%,transparent 50%),#0a0a0f}.bg::before,.bg::after{content:"";position:absolute;border-radius:50%;filter:blur(80px);opacity:.3}.bg::before{width:50vw;height:50vw;left:-10vw;top:-10vw;background:#7c5cff}.bg::after{width:40vw;height:40vw;right:-5vw;bottom:-15vw;background:#ff6b6b}.app{position:relative;z-index:1;width:min(100%,1180px);margin:auto;min-height:100vh}.glass{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}main{padding:clamp(24px,4vw,46px) clamp(14px,4vw,46px) 128px}.view{display:none}.view.active{display:block;animation:enter .34s var(--ease)}@keyframes enter{from{opacity:0;transform:translateY(8px)}}.head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:26px}.head h1{font-size:clamp(2.1rem,5vw,3rem);line-height:1;letter-spacing:-.055em;margin:0}.head p{margin:9px 0 0;color:var(--muted);max-width:65ch}.card{border-radius:24px;padding:24px}.card h2,.card h3{margin:0;letter-spacing:-.025em}.btn,.input{background:rgba(255,255,255,0.05);border:1px solid var(--line);transition:all .14s var(--ease)}.btn{min-height:46px;border-radius:14px;padding:0 16px;font-weight:760;display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--ink)}.btn:hover:not(:disabled){background:rgba(255,255,255,0.1);transform:translateY(-1px)}.btn:active:not(:disabled){transform:scale(.98)}.btn svg{width:18px}.btn.primary{background:linear-gradient(145deg,var(--violet),#5a3fd6);color:#fff;border-color:transparent}.btn.danger{background:var(--danger);color:#fff;border-color:transparent}.input{width:100%;height:50px;border-radius:13px;padding:0 14px;background:rgba(255,255,255,0.03);border:1px solid var(--line);color:var(--ink)}.input::placeholder{color:var(--muted)}textarea.input{height:120px;padding:12px;resize:vertical}.field{display:grid;gap:7px}.field label{font-size:.8rem;font-weight:760;color:var(--muted)}.hint{font-size:.72rem;color:var(--muted)}.muted{color:var(--muted)}.empty{min-height:180px;display:grid;place-items:center;text-align:center;color:var(--muted);padding:24px}.empty svg{width:32px;height:32px;margin-bottom:8px}.empty p{margin:4px 0}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:20px}.metric{min-height:132px}.metric-label{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:.86rem;font-weight:680}.metric-label svg{width:18px}.metric strong{display:block;font-size:2.2rem;margin-top:17px;font-variant-numeric:tabular-nums;color:var(--ink)}.dial-grid,.setup-grid{display:grid;grid-template-columns:1fr .64fr;gap:20px}.form{display:grid;gap:17px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.full{grid-column:1/-1}.call-button{width:100%}.live-call{display:grid;align-content:start;gap:18px}.call-info{display:flex;align-items:center;gap:12px}.avatar{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#7c5cff,#ff6b6b);font-weight:850;color:#fff}.timer{font-size:3rem;font-weight:820;text-align:center;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:var(--violet)}.call-actions{display:flex;justify-content:center;gap:10px}.circle{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:rgba(255,255,255,0.03)}.circle.end{background:var(--danger);color:#fff}.lead-tools{display:grid;gap:18px}.batch{display:flex;gap:8px;flex-wrap:wrap}.batch button{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,0.03)}.batch button.active{background:var(--violet);color:#fff}.lead-list{margin-top:20px}.lead-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:15px;border-bottom:1px solid var(--line)}.lead-row{display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.lead-row strong,.lead-row span{display:block}.lead-row span{font-size:.76rem;color:var(--muted)}.status-pill{font-size:.68rem;padding:5px 8px;border-radius:999px;background:rgba(78,205,196,0.15);color:var(--mint)}.status-pill.live{background:rgba(255,71,87,0.15);color:var(--danger);animation:pulse-live 1.5s ease infinite}@keyframes pulse-live{0%,100%{opacity:1}50%{opacity:.5}}.status-pill.code{background:linear-gradient(145deg,rgba(78,205,196,0.3),rgba(78,205,196,0.15));color:var(--mint)}.status-pill.completed{background:rgba(124,92,255,0.15);color:var(--violet)}.status-pill.ended{background:rgba(255,71,87,0.15);color:var(--danger)}.chat-layout{display:grid;grid-template-columns:250px 1fr;gap:18px;height:590px}.sessions{overflow:auto}.session{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:14px 8px;text-align:left;color:var(--muted)}.session.active{color:var(--violet);font-weight:760}.conversation{display:grid;grid-template-rows:auto 1fr auto;padding:0;overflow:hidden}.chathead{padding:17px 20px;border-bottom:1px solid var(--line)}.messages{padding:20px;overflow:auto;display:flex;flex-direction:column;gap:12px}.message{max-width:82%}.message.client{align-self:flex-end}.speaker{font-size:.64rem;text-transform:uppercase;color:var(--muted);font-weight:850;margin:0 0 4px 5px}.bubble{padding:11px 14px;border-radius:16px;background:rgba(255,255,255,0.05);border:1px solid var(--line);color:var(--ink)}.client .bubble{background:linear-gradient(145deg,rgba(124,92,255,0.3),rgba(255,107,107,0.2))}.history-layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;min-height:650px}.calls,.detail{padding:18px}.call-row{width:100%;display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:12px 7px;border:1px solid transparent;border-radius:15px;background:transparent;text-align:left;color:var(--ink)}.call-row.active,.call-row:hover{background:rgba(255,255,255,0.03);border-color:var(--line)}.call-row strong,.call-row span{display:block}.call-row span{font-size:.7rem;color:var(--muted)}.detail{display:grid;gap:18px;align-content:start}.detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-meta div{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,0.02)}.player{height:56px;border-radius:15px;background:rgba(0,0,0,0.5);color:var(--ink);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:0 14px}.player button{border:0;background:transparent;color:inherit}.track{height:5px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden}.progress{width:0;height:100%;background:var(--violet)}.history-messages{border:1px solid var(--line);border-radius:17px;padding:14px;max-height:360px;overflow:auto}.bottomnav{position:fixed;z-index:40;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 24px),920px);height:76px;border-radius:25px;padding:8px;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;background:rgba(10,10,15,0.8);border:1px solid var(--line);backdrop-filter:blur(20px)}.bottomnav::-webkit-scrollbar{display:none}.tab{height:58px;min-width:74px;flex:1;border:1px solid transparent;border-radius:19px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.64rem;font-weight:720}.tab svg{width:20px;height:20px}.tab.active{background:linear-gradient(145deg,var(--violet),#5a3fd6);color:#fff;box-shadow:0 9px 22px rgba(124,92,255,0.3)}.toast{position:fixed;left:50%;bottom:102px;transform:translate(-50%,15px);padding:12px 16px;border-radius:14px;background:rgba(20,20,30,0.95);border:1px solid var(--line);color:var(--ink);opacity:0;pointer-events:none;z-index:50;transition:.2s var(--ease)}.toast.show{opacity:1;transform:translate(-50%,0)}.live-indicator{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:14px;background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);margin-bottom:16px}.live-dot{width:10px;height:10px;border-radius:50%;background:var(--danger);animation:blink 1s ease infinite}@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}.moneypak-banner{padding:16px;border-radius:16px;background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.3);margin-top:12px}.moneypak-banner strong{color:var(--mint);font-size:1.1rem}.moneypak-banner code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1.4rem;color:var(--mint);background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:8px;display:inline-block;margin-top:6px}.transfer-banner{padding:14px;border-radius:14px;background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);margin-top:12px;display:none}.transfer-banner strong{color:#f39c12;font-size:1rem}.transfer-banner .transfer-number{font-family:ui-monospace,monospace;font-size:1.2rem;color:#f39c12;margin-top:6px}.hidden{display:none!important}.agent-simple{max-width:600px;margin:0 auto}@media(max-width:800px){.metrics,.dial-grid,.setup-grid,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.history-layout{grid-template-columns:1fr}.calls{display:flex;overflow:auto;gap:6px}.call-row{min-width:220px}.chat-layout{display:block;height:auto}.sessions{display:flex;overflow:auto;margin-bottom:12px}.session{min-width:180px}.conversation{height:550px}}@media(max-width:520px){main{padding-top:24px}.head{display:block}.head>.btn{width:100%;margin-top:16px}.card,.detail{padding:18px}.tab{min-width:58px}.tab span{display:none}.bottomnav{height:68px}.message{max-width:90%}.detail-meta{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="app">
+
+<main>
+<!-- DASHBOARD -->
+<section class="view active" id="dashboard">
+  <header class="head"><div><h1>Bland AI Dialer</h1><p>AI-powered calling with real-time transfer.</p></div><button class="btn primary" data-go="dialer"><i data-lucide="phone"></i>New call</button></header>
+  <div class="metrics">
+    <article class="card glass metric"><div class="metric-label"><i data-lucide="phone-call"></i>Live calls</div><strong id="liveCount">0</strong></article>
+    <article class="card glass metric"><div class="metric-label"><i data-lucide="phone-ringing"></i>Ringing</div><strong id="ringingCount">0</strong></article>
+    <article class="card glass metric"><div class="metric-label"><i data-lucide="clock-3"></i>Completed</div><strong id="completedCount">0</strong></article>
+  </div>
+  <article class="card glass"><h3>Live calls</h3><div id="dashboardLive"><div class="empty"><div><i data-lucide="phone-off"></i><p>No calls right now.</p><p>Configure Bland AI, then start a call.</p></div></div></div></article>
+</section>
+
+<!-- DIALER -->
+<section class="view" id="dialer">
+  <header class="head"><div><h1>AI Dialer</h1><p>Bland AI voice with live transfer.</p></div></header>
+  <div class="dial-grid">
+    <article class="card glass form">
+      <h3>Launch AI Call</h3>
+      <div class="field"><label>Target name</label><input class="input" id="targetName" placeholder="Full name" autocomplete="off"></div>
+      <div class="form-grid">
+        <div class="field full"><label>Phone number</label><input class="input" id="phoneNumber" type="tel" placeholder="+1..." autocomplete="off"></div>
+      </div>
+      <div class="field"><label>Transfer number (optional)</label><input class="input" id="transferNumber" type="tel" placeholder="+1... (transfers target to this number)" autocomplete="off"></div>
+      <button class="btn primary call-button" id="callButton"><i data-lucide="phone"></i>Launch AI Call</button>
+    </article>
+    <article class="card glass live-call" id="liveCall">
+      <h3>Live AI Call</h3>
+      <div id="liveCallContent"><div class="empty"><div><i data-lucide="radio"></i><p>Waiting for a call.</p></div></div></div>
+    </article>
+  </div>
+</section>
+
+<!-- LEADS -->
+<section class="view" id="leads">
+  <header class="head"><div><h1>Leads</h1><p>Import targets and batch-dial with AI.</p></div></header>
+  <article class="card glass lead-tools">
+    <div><strong>Batch size</strong><div class="batch" id="batch"><button class="active">1</button><button>5</button><button>10</button><button>20</button><button>50</button></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn" id="uploadCsvButton"><i data-lucide="file-spreadsheet"></i>Import CSV</button>
+      <button class="btn" id="uploadPdfButton"><i data-lucide="file-text"></i>Import PDF</button>
+      <input id="csvFile" type="file" accept=".csv" hidden>
+      <input id="pdfFile" type="file" accept=".pdf" hidden>
+    </div>
+    <button class="btn primary" id="startCampaign" disabled><i data-lucide="play"></i>Start AI Campaign</button>
+  </article>
+  <article class="card glass lead-list">
+    <div class="lead-head"><strong id="leadCount">0 leads</strong><button class="btn danger" id="clearLeads" disabled>Clear all</button></div>
+    <div id="leadRows"><div class="empty"><div><i data-lucide="users"></i><p>No leads imported.</p></div></div></div>
+  </article>
+</section>
+
+<!-- HISTORY -->
+<section class="view" id="history">
+  <header class="head"><div><h1>Call History</h1><p>Recordings, transcripts, and captured codes.</p></div><button class="btn" id="exportHistory" disabled><i data-lucide="download"></i>Export</button></header>
+  <div class="history-layout">
+    <aside class="calls glass"><input class="input" id="historySearch" placeholder="Search calls" disabled><div id="callList"><div class="empty"><p>No call history.</p></div></div></aside>
+    <section class="detail glass" id="historyDetail"><div class="empty"><div><i data-lucide="history"></i><p>Select a completed call.</p></div></div></section>
+  </div>
+</section>
+
+<!-- TRANSCRIPT -->
+<section class="view" id="transcript">
+  <header class="head"><div><h1>Live Transcript</h1><p>Real-time AI conversation feed.</p></div></header>
+  <div class="chat-layout">
+    <aside class="card glass sessions" id="sessions"><div class="empty"><p>No sessions.</p></div></aside>
+    <section class="card glass conversation">
+      <div class="chathead"><strong id="transcriptTitle">No call selected</strong><span id="transcriptStatus" class="muted" style="font-size:.75rem;margin-left:8px;"></span></div>
+      <div class="messages" id="messages"><div class="empty"><p>No transcript.</p></div></div>
+    </section>
+  </div>
+</section>
+
+<!-- AGENT -->
+<section class="view" id="agent">
+  <header class="head"><div><h1>AI Agent</h1><p>Select your Bland AI agent.</p></div></header>
+  <div class="agent-simple">
+    <article class="card glass form">
+      <div class="field"><label>Bland AI Agent ID</label><input class="input" id="blandAgentId" placeholder="Paste your Bland AI agent ID here" autocomplete="off"></div>
+      <button class="btn primary" id="saveAgent" style="width:100%;"><i data-lucide="save"></i>Save agent</button>
+    </article>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section class="view" id="setup">
+  <header class="head"><div><h1>Settings</h1><p>Configure your credentials. Everything stays local.</p></div><button class="btn danger" id="clearSetup"><i data-lucide="trash-2"></i>Clear</button></header>
+  <div class="setup-grid">
+    <article class="card glass form">
+      <div class="field"><label>Bland AI API Key</label><input class="input" id="blandApiKey" type="password" placeholder="Your Bland AI API key"></div>
+      <div class="field"><label>From Number</label><input class="input" id="blandFromNumber" type="tel" placeholder="+1234567890"></div>
+      <div class="field"><label>OpenAI API Key <span class="hint">(optional)</span></label><input class="input" id="openaiApiKey" type="password" placeholder="Your OpenAI API key (optional)"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="saveSetup"><i data-lucide="save"></i>Save config</button><button class="btn" id="testSetup"><i data-lucide="radio"></i>Test connection</button></div>
+    </article>
+    <aside class="card glass"><h3>Connection status</h3><p class="muted">Enter your Bland AI API key and from number above. OpenAI key is optional for enhanced features.</p><p class="muted" id="setupStatus">Not configured.</p></aside>
+  </div>
+</section>
+</main>
+
+<nav class="bottomnav" aria-label="Main navigation">
+  <button class="tab active" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
+  <button class="tab" data-view="dialer"><i data-lucide="phone"></i><span>Dialer</span></button>
+  <button class="tab" data-view="leads"><i data-lucide="users"></i><span>Leads</span></button>
+  <button class="tab" data-view="history"><i data-lucide="history"></i><span>History</span></button>
+  <button class="tab" data-view="transcript"><i data-lucide="messages-square"></i><span>Transcript</span></button>
+  <button class="tab" data-view="agent"><i data-lucide="bot"></i><span>Agent</span></button>
+  <button class="tab" data-view="setup"><i data-lucide="settings"></i><span>Setup</span></button>
+</nav>
+</div>
+
+<div class="toast glass" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let leads = JSON.parse(localStorage.getItem('bland_leads') || '[]');
+let callHistory = JSON.parse(localStorage.getItem('bland_history') || '[]');
+let agentId = localStorage.getItem('bland_agent_id') || '';
+let selectedCall = 0, toastTimer;
+let pollInterval = null;
+let activeCallId = null;
+
+const DEFAULT_SCRIPT = `You are a human calling {{name}}. Speak naturally with pauses, filler words like "um" and "you know." Be warm, confident, and persuasive. Never say you are AI, a bot, or automated. Use slight imperfections in speech. Adapt to the conversation flow. If the target asks for proof or verification, provide confident, specific details. If they refuse, be polite and end the call. Extract any important information they provide. If a transfer number is configured, transfer them after achieving the primary goal.`;
+
+function getConfig() {
+  return {
+    apiKey: localStorage.getItem('bland_api_key') || '',
+    fromNumber: localStorage.getItem('bland_from_number') || '',
+    openaiKey: localStorage.getItem('openai_api_key') || ''
+  };
+}
+
+function getHeaders() {
+  return {
+    'Authorization': getConfig().apiKey,
+    'Content-Type': 'application/json'
+  };
+}
+
+function getApiUrl(path) {
+  return 'https://api.bland.ai/v1' + path;
+}
+
+function icons() { lucide.createIcons(); }
+function toast(text) {
+  $('toast').textContent = text;
+  $('toast').classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $('toast').classList.remove('show'), 3200);
+}
+function esc(s) { return String(s ?? '').replace(/[<>&]/g, x => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[x])); }
+function initials(n) { return String(n || '?').split(/\s+/).map(x => x[0]).join('').slice(0, 2).toUpperCase(); }
+function fmt(s) { return `${String(s / 60 | 0).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; }
+
+// ==================== EXTRACTION ENGINE ====================
+function extractPhoneNumbers(text) {
+  const patterns = [
+    /\+?1?\s*[-.]?\s*\(?\d{3}\)?\s*[-.]?\s*\d{3}\s*[-.]?\s*\d{4}/g,
+    /\+?1?\s*\d{3}\s*\d{3}\s*\d{4}/g,
+    /\(\d{3}\)\s*\d{3}[-.]?\d{4}/g,
+    /\d{3}[-.]\d{3}[-.]\d{4}/g,
+    /\+\d{1,3}\s*\d{1,4}\s*\d{1,4}\s*\d{1,4}/g
+  ];
+  const found = new Set();
+  for (const p of patterns) {
+    const matches = text.match(p);
+    if (matches) matches.forEach(m => {
+      const digits = m.replace(/\D/g, '');
+      const normalized = digits.length === 10 ? '+1' + digits : digits.length === 11 && digits[0] === '1' ? '+' + digits : '+' + digits;
+      found.add(normalized);
+    });
+  }
+  return Array.from(found);
+}
+
+function extractNames(text) {
+  const lines = text.split(/\n/).map(l => l.trim()).filter(Boolean);
+  const names = [];
+  const namePattern = /^[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+$/;
+  for (const line of lines) {
+    if (namePattern.test(line) && line.length < 40 && !/Inc\.|LLC|Corp|Ltd|@|www|http|Street|Avenue|Road|Drive|Lane|Boulevard|Blvd|Ave|St|Rd|Dr/.test(line)) {
+      names.push(line);
+    }
+  }
+  return names;
+}
+
+function extractAddresses(text) {
+  const patterns = [
+    /\d+\s+(?:[A-Z][a-zA-Z]*\.?\s*)+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Lane|Ln|Boulevard|Blvd|Court|Ct|Circle|Cir|Way|Trail|Trl|Parkway|Pkwy|Highway|Hwy)\s*,?\s*(?:[A-Z][a-zA-Z]*\.?\s*)*,?\s*[A-Z]{2}\s*\d{5}(?:-\d{4})?/gi,
+    /\d+\s+(?:[A-Z][a-zA-Z]*\.?\s*)+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Lane|Ln|Boulevard|Blvd)\s*,?\s*[A-Z]{2}\s*\d{5}/gi,
+    /\d+\s+[A-Z][a-zA-Z]+\s+(?:Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Lane|Ln)\s+[A-Z][a-zA-Z]+,?\s*[A-Z]{2}\s*\d{5}/gi
+  ];
+  const found = new Set();
+  for (const p of patterns) {
+    const matches = text.match(p);
+    if (matches) matches.forEach(m => found.add(m.replace(/\s+/g, ' ').trim()));
+  }
+  return Array.from(found);
+}
+
+function normalizePhone(raw) {
+  const digits = raw.replace(/\D/g, '');
+  if (digits.length === 10) return '+1' + digits;
+  if (digits.length === 11 && digits[0] === '1') return '+' + digits;
+  if (digits.length > 10) return '+' + digits;
+  return raw;
+}
+
+// ==================== PDF PARSING ====================
+async function parsePDF(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let fullText = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    fullText += content.items.map(item => item.str).join(' ') + '\n';
+  }
+  return fullText;
+}
+
+function parseLeadsFromText(text) {
+  const phones = extractPhoneNumbers(text);
+  const names = extractNames(text);
+  const addresses = extractAddresses(text);
+  const parsed = [];
+  const lines = text.split(/\n/).map(l => l.trim()).filter(Boolean);
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const phoneInLine = extractPhoneNumbers(line)[0];
+    if (phoneInLine) {
+      let name = '';
+      let address = '';
+      for (let j = Math.max(0, i - 8); j < i; j++) {
+        const candidate = lines[j].trim();
+        if (/^[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+$/.test(candidate) && candidate.length < 40 && !/Street|Avenue|Road|St|Ave|Rd|@|www/.test(candidate)) {
+          name = candidate;
+          break;
+        }
+      }
+      if (!name && names.length) name = names.shift();
+      const nearbyText = lines.slice(Math.max(0, i - 3), Math.min(lines.length, i + 4)).join(' ');
+      const addrMatch = extractAddresses(nearbyText)[0];
+      if (addrMatch) address = addrMatch;
+      else if (addresses.length) address = addresses.shift();
+      parsed.push({ name: name || 'Unknown', phone: normalizePhone(phoneInLine), address: address || '' });
+    }
+  }
+  
+  if (!parsed.length && phones.length) {
+    phones.forEach((p, i) => parsed.push({
+      name: names[i] || 'Unknown',
+      phone: normalizePhone(p),
+      address: addresses[i] || ''
+    }));
+  }
+  
+  return parsed;
+}
+
+// ==================== NAVIGATION ====================
+function go(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === id));
+  $(id).classList.add('active');
+  if (id === 'history') renderHistory();
+  if (id === 'transcript') renderTranscripts();
+  if (id === 'agent') renderAgent();
+  if (id === 'setup') loadSetup();
+  if (id === 'dashboard') updateDashboard();
+}
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => go(t.dataset.view));
+document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(b.dataset.go));
+
+function renderAgent() {
+  $('blandAgentId').value = agentId;
+}
+
+$('saveAgent').onclick = () => {
+  const id = $('blandAgentId').value.trim();
+  if (!id) return toast('Enter a Bland AI agent ID');
+  agentId = id;
+  localStorage.setItem('bland_agent_id', agentId);
+  toast('Agent saved');
+};
+
+async function blandRequest(endpoint, method = 'GET', body = null) {
+  const cfg = getConfig();
+  if (!cfg.apiKey) throw new Error('Bland AI not configured. Go to Setup.');
+  const url = getApiUrl(endpoint);
+  const opts = { method, headers: getHeaders() };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(url, opts);
+  if (!r.ok) {
+    const errText = await r.text();
+    throw new Error(`HTTP ${r.status}: ${errText}`);
+  }
+  return await r.json();
+}
+
+function buildTask(name, transferNum) {
+  let task = DEFAULT_SCRIPT;
+  task = task.replace(/\{\{name\}\}/g, name);
+  if (transferNum) {
+    task += `\n\nTRANSFER NUMBER: ${transferNum}. If the target agrees or needs escalation, transfer to this number immediately.`;
+  }
+  return task;
+}
+
+$('callButton').onclick = async () => {
+  const cfg = getConfig();
+  const name = $('targetName').value.trim();
+  const phone = $('phoneNumber').value.trim();
+  const transferNum = $('transferNumber').value.trim();
+  
+  if (!cfg.apiKey || !cfg.fromNumber) {
+    go('setup');
+    return toast('Configure Bland AI first');
+  }
+  if (!name || !phone) return toast('Enter target name and phone number');
+  
+  toast('Initiating Bland AI call...');
+  
+  try {
+    const body = {
+      phone_number: phone,
+      from: cfg.fromNumber,
+      task: buildTask(name, transferNum),
+      voice: 'josh',
+      language: 'en',
+      record: true,
+      model: 'base',
+      transfer_to_phone_number: transferNum || undefined,
+      metadata: { target_name: name, transfer_number: transferNum || '' }
+    };
+    
+    if (agentId) {
+      body.agent_id = agentId;
+      delete body.task;
+      delete body.voice;
+    }
+    
+    const result = await blandRequest('/calls', 'POST', body);
+    activeCallId = result.call_id;
+    toast('Call initiated: ' + result.call_id);
+    startPolling();
+    renderLiveCall(result.call_id, name, phone, transferNum);
+    
+    const call = {
+      id: result.call_id,
+      name: name,
+      phone: phone,
+      status: 'initiated',
+      duration: 0,
+      time: new Date().toLocaleString(),
+      transcript: [],
+      moneypakCode: null,
+      transferNumber: transferNum,
+      recordingUrl: null
+    };
+    callHistory.unshift(call);
+    localStorage.setItem('bland_history', JSON.stringify(callHistory));
+    
+  } catch (err) {
+    toast('Call failed: ' + err.message);
+    console.error(err);
+  }
+};
+
+function renderLiveCall(id, name, phone, transferNum) {
+  let transferHtml = '';
+  if (transferNum) {
+    transferHtml = `<div class="transfer-banner" style="display:block;">
+      <strong>TRANSFER CONFIGURED</strong>
+      <div class="transfer-number">${esc(transferNum)}</div>
+    </div>`;
+  }
+  
+  $('liveCallContent').innerHTML = `
+    <div class="live-indicator"><div class="live-dot"></div><strong>Bland AI Live</strong></div>
+    <div class="call-info"><span class="avatar">${initials(name)}</span><div><strong>${esc(name)}</strong><div class="muted">${esc(phone)}</div></div></div>
+    <div class="timer" id="liveTimer">00:00</div>
+    <div class="call-actions">
+      <button class="circle end" onclick="endCall('${id}')" title="End"><i data-lucide="phone-off"></i></button>
+    </div>
+    ${transferHtml}
+    <div class="moneypak-banner" id="moneypakBanner" style="display:none;">
+      <strong>CODE CAPTURED</strong><br>
+      <code id="moneypakCode">----</code>
+    </div>
+    <div style="margin-top:12px;font-size:.78rem;color:var(--muted);">Call ID: ${esc(id)}</div>
+  `;
+  icons();
+  let sec = 0;
+  window.liveTimerInterval = setInterval(() => { sec++; $('liveTimer').textContent = fmt(sec); }, 1000);
+}
+
+async function endCall(id) {
+  clearInterval(window.liveTimerInterval);
+  try { await blandRequest('/calls/' + id + '/end', 'POST'); } catch (e) {}
+  $('liveCallContent').innerHTML = '<div class="empty"><div><i data-lucide="radio"></i><p>Call ended.</p></div></div>';
+  icons();
+  stopPolling();
+  renderHistory();
+}
+
+function startPolling() {
+  if (pollInterval) return;
+  pollInterval = setInterval(async () => {
+    const cfg = getConfig();
+    if (!cfg.apiKey) return;
+    try {
+      const result = await blandRequest('/calls?page_size=50');
+      const calls = result.calls || [];
+      
+      const live = calls.filter(c => c.status === 'in_progress' || c.status === 'ringing');
+      const completed = calls.filter(c => c.status === 'completed' || c.status === 'ended');
+      
+      $('liveCount').textContent = live.length;
+      $('ringingCount').textContent = calls.filter(c => c.status === 'ringing').length;
+      $('completedCount').textContent = completed.length;
+      
+      if (activeCallId) {
+        const active = calls.find(c => c.call_id === activeCallId);
+        if (active) {
+          updateCallInHistory(active);
+          if (active.transcript) {
+            const fullText = active.transcript.map(t => t.text).join(' ');
+            const codeMatch = fullText.match(/\b\d{14}\b/);
+            if (codeMatch) {
+              const code = codeMatch[0];
+              const call = callHistory.find(c => c.id === activeCallId);
+              if (call && !call.moneypakCode) {
+                call.moneypakCode = code;
+                localStorage.setItem('bland_history', JSON.stringify(callHistory));
+                const banner = $('moneypakBanner');
+                const codeEl = $('moneypakCode');
+                if (banner && codeEl) {
+                  banner.style.display = 'block';
+                  codeEl.textContent = code;
+                }
+                toast('Code captured: ' + code);
+              }
+            }
+          }
+          if (active.recording_url) {
+            const call = callHistory.find(c => c.id === activeCallId);
+            if (call) call.recordingUrl = active.recording_url;
+          }
+        }
+      }
+      updateDashboard();
+    } catch (e) {}
+  }, 5000);
+}
+
+function stopPolling() {
+  clearInterval(pollInterval);
+  pollInterval = null;
+}
+
+function updateCallInHistory(activeCall) {
+  const idx = callHistory.findIndex(c => c.id === activeCall.call_id);
+  if (idx === -1) return;
+  const call = callHistory[idx];
+  call.status = activeCall.status;
+  call.duration = activeCall.duration || call.duration;
+  if (activeCall.transcript) {
+    call.transcript = activeCall.transcript.map(t => ({
+      speaker: t.speaker === 'user' ? 'client' : 'agent',
+      text: t.text,
+      time: t.timestamp
+    }));
+  }
+  if (activeCall.recording_url) call.recordingUrl = activeCall.recording_url;
+  localStorage.setItem('bland_history', JSON.stringify(callHistory));
+}
+
+function updateDashboard() {
+  const live = callHistory.filter(c => c.status === 'in_progress' || c.status === 'ringing' || c.status === 'initiated');
+  if (live.length) {
+    $('dashboardLive').innerHTML = live.map(c => `
+      <div class="lead-row" style="border-bottom:1px solid var(--line);">
+        <div class="avatar">${initials(c.name)}</div>
+        <div><strong>${esc(c.name)}</strong><span>${esc(c.phone)} · ${esc(c.status)}</span></div>
+        <span class="status-pill ${c.status === 'in_progress' ? 'live' : ''}">${esc(c.status)}</span>
+      </div>
+    `).join('');
+  } else {
+    $('dashboardLive').innerHTML = '<div class="empty"><div><i data-lucide="phone-off"></i><p>No calls right now.</p><p>Configure Bland AI, then start a call.</p></div></div>';
+  }
+  icons();
+}
+
+// ==================== LEADS ====================
+function renderLeads() {
+  $('leadCount').textContent = `${leads.length} lead${leads.length === 1 ? '' : 's'}`;
+  $('clearLeads').disabled = !leads.length;
+  $('startCampaign').disabled = !leads.length;
+  $('leadRows').innerHTML = leads.length ? leads.map(l => `
+    <div class="lead-row">
+      <div class="avatar">${initials(l.name)}</div>
+      <div><strong>${esc(l.name)}</strong><span>${esc(l.address || 'No address')} · ${esc(l.phone)}</span></div>
+      <span class="status-pill">Ready</span>
+    </div>
+  `).join('') : '<div class="empty"><div><i data-lucide="users"></i><p>No leads imported.</p></div></div>';
+  icons();
+}
+
+function addLeads(newLeads) {
+  if (!newLeads.length) return toast('No leads found in file');
+  leads.push(...newLeads);
+  localStorage.setItem('bland_leads', JSON.stringify(leads));
+  renderLeads();
+  toast(`${newLeads.length} lead${newLeads.length === 1 ? '' : 's'} imported`);
+}
+
+// CSV Import
+$('uploadCsvButton').onclick = () => $('csvFile').click();
+$('csvFile').onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    const rows = r.result.split(/\r?\n/).filter(Boolean);
+    const headers = rows[0].split(',').map(h => h.trim().toLowerCase());
+    const start = /name/i.test(rows[0]) ? 1 : 0;
+    
+    const nameIdx = headers.findIndex(h => h.includes('name'));
+    const phoneIdx = headers.findIndex(h => h.includes('phone') || h.includes('number') || h.includes('mobile'));
+    const addrIdx = headers.findIndex(h => h.includes('address') || h.includes('street') || h.includes('location'));
+    
+    const parsed = [];
+    for (let i = start; i < rows.length; i++) {
+      const cols = rows[i].split(',').map(x => x.trim());
+      const name = nameIdx >= 0 ? cols[nameIdx] : cols[0];
+      const phone = phoneIdx >= 0 ? cols[phoneIdx] : cols[1];
+      const address = addrIdx >= 0 ? cols[addrIdx] : (cols[2] || '');
+      if (name && phone) parsed.push({ name, phone: normalizePhone(phone), address });
+    }
+    addLeads(parsed);
+  };
+  r.readAsText(file);
+};
+
+// PDF Import
+$('uploadPdfButton').onclick = () => $('pdfFile').click();
+$('pdfFile').onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  toast('Parsing PDF...');
+  try {
+    const text = await parsePDF(file);
+    const parsed = parseLeadsFromText(text);
+    addLeads(parsed);
+  } catch (err) {
+    toast('PDF parse failed: ' + err.message);
+    console.error(err);
+  }
+};
+
+$('clearLeads').onclick = () => { if (confirm('Clear all imported leads?')) { leads = []; localStorage.removeItem('bland_leads'); renderLeads(); } };
+$('batch').querySelectorAll('button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#batch button').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+});
+$('startCampaign').onclick = async () => {
+  const batch = parseInt(document.querySelector('#batch button.active').textContent);
+  const batchLeads = leads.slice(0, batch);
+  toast(`Launching AI campaign for ${batchLeads.length} leads...`);
+  for (const lead of batchLeads) {
+    try {
+      const body = {
+        phone_number: lead.phone,
+        from: getConfig().fromNumber,
+        task: buildTask(lead.name, ''),
+        voice: 'josh',
+        language: 'en',
+        record: true,
+        model: 'base',
+        metadata: { target_name: lead.name }
+      };
+      if (agentId) {
+        body.agent_id = agentId;
+        delete body.task;
+        delete body.voice;
+      }
+      await blandRequest('/calls', 'POST', body);
+      await new Promise(r => setTimeout(r, 3000));
+    } catch (e) { console.error(e); }
+  }
+  startPolling();
+};
+
+function renderHistory() {
+  callHistory = JSON.parse(localStorage.getItem('bland_history') || '[]');
+  $('completedCount').textContent = callHistory.filter(c => c.status === 'completed' || c.status === 'ended').length;
+  $('exportHistory').disabled = !callHistory.length;
+  $('historySearch').disabled = !callHistory.length;
+  const q = $('historySearch').value.toLowerCase();
+  const filtered = callHistory.filter(h => (h.name + h.phone).toLowerCase().includes(q));
+  $('callList').innerHTML = filtered.length ? filtered.map((h, i) => `
+    <button class="call-row ${i === selectedCall ? 'active' : ''}" data-i="${i}">
+      <span class="avatar">${initials(h.name)}</span>
+      <span><strong>${esc(h.name)}</strong><span>${esc(h.phone)} · ${esc(h.time)}</span></span>
+      <span class="status-pill ${h.moneypakCode ? 'code' : h.status === 'completed' || h.status === 'ended' ? 'completed' : 'live'}">${h.moneypakCode || esc(h.status)}</span>
+    </button>
+  `).join('') : '<div class="empty"><p>No call history.</p></div>';
+  document.querySelectorAll('.call-row').forEach(b => b.onclick = () => {
+    selectedCall = +b.dataset.i;
+    clearInterval(window.liveTimerInterval);
+    renderHistory();
+    renderHistoryDetail();
+  });
+  renderHistoryDetail();
+  icons();
+}
+
+function renderHistoryDetail() {
+  const h = callHistory[selectedCall];
+  if (!h) { $('historyDetail').innerHTML = '<div class="empty"><div><i data-lucide="history"></i><p>Select a completed call.</p></div></div>'; icons(); return; }
+  const hasRecording = h.recordingUrl;
+  $('historyDetail').innerHTML = `
+    <div class="call-info"><span class="avatar">${initials(h.name)}</span><div><strong>${esc(h.name)}</strong><div class="muted">${esc(h.phone)}</div></div></div>
+    <div class="detail-meta">
+      <div><span class="hint">Status</span><strong>${esc(h.status)}</strong></div>
+      <div><span class="hint">Duration</span><strong>${fmt(h.duration || 0)}</strong></div>
+    </div>
+    ${h.transferNumber ? `<div class="transfer-banner" style="display:block;"><strong>TRANSFERRED TO</strong><div class="transfer-number">${esc(h.transferNumber)}</div></div>` : ''}
+    ${h.moneypakCode ? `<div class="moneypak-banner"><strong>CODE CAPTURED</strong><br><code>${esc(h.moneypakCode)}</code></div>` : ''}
+    ${hasRecording ? `<div style="margin-top:8px;"><audio controls style="width:100%;border-radius:12px;" src="${esc(h.recordingUrl)}"></audio></div>` : ''}
+    <div class="history-messages">${h.transcript?.length ? h.transcript.map(m => `
+      <div class="message ${m.speaker === 'client' ? 'client' : ''}"><div class="speaker">${m.speaker === 'client' ? 'Client' : 'Agent'}</div><div class="bubble">${esc(m.text)}</div></div>
+    `).join('') : '<div class="empty">No transcript captured.</div>'}</div>
+  `;
+  icons();
+}
+$('historySearch').oninput = renderHistory;
+$('exportHistory').onclick = () => {
+  const csv = 'id,name,phone,status,duration,time,moneypakCode,transferNumber,recordingUrl\n' + callHistory.map(h => [
+    h.id, h.name, h.phone, h.status, h.duration, h.time, h.moneypakCode || '', h.transferNumber || '', h.recordingUrl || ''
+  ].join(',')).join('\n');
+  download('call-history.csv', csv, 'text/csv');
+};
+
+function renderTranscripts() {
+  if (!callHistory.length) { 
+    $('sessions').innerHTML = '<div class="empty"><p>No sessions.</p></div>'; 
+    $('messages').innerHTML = '<div class="empty"><p>No transcript.</p></div>'; 
+    return; 
+  }
+  $('sessions').innerHTML = callHistory.map((h, i) => `
+    <button class="session ${i === selectedCall ? 'active' : ''}" data-i="${i}">
+      <div style="font-weight:700;">${esc(h.name)}</div>
+      <div style="font-size:.7rem;color:var(--muted);">${esc(h.phone)}</div>
+      <div style="font-size:.65rem;margin-top:4px;">${h.moneypakCode ? 'Code: ' + esc(h.moneypakCode) : esc(h.status)}</div>
+    </button>
+  `).join('');
+  document.querySelectorAll('.session').forEach(b => b.onclick = () => { selectedCall = +b.dataset.i; renderTranscripts(); });
+  const h = callHistory[selectedCall];
+  if (!h) return;
+  $('transcriptTitle').textContent = h.name;
+  $('transcriptStatus').textContent = h.moneypakCode ? 'Code: ' + h.moneypakCode : h.status;
+  $('messages').innerHTML = h.transcript?.length ? h.transcript.map(m => `
+    <div class="message ${m.speaker === 'client' ? 'client' : ''}"><div class="speaker">${m.speaker === 'client' ? 'Client' : 'Agent'}</div><div class="bubble">${esc(m.text)}</div></div>
+  `).join('') : '<div class="empty"><p>No transcript available.</p></div>';
+}
+
+function loadSetup() {
+  const cfg = getConfig();
+  $('blandApiKey').value = cfg.apiKey;
+  $('blandFromNumber').value = cfg.fromNumber;
+  $('openaiApiKey').value = cfg.openaiKey;
+  if (cfg.apiKey && cfg.fromNumber) {
+    $('setupStatus').textContent = 'Configured. Ready to call.';
+  } else {
+    $('setupStatus').textContent = 'Not configured. Enter your Bland AI credentials above.';
+  }
+}
+
+function download(name, text, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+$('saveSetup').onclick = () => {
+  localStorage.setItem('bland_api_key', $('blandApiKey').value.trim());
+  localStorage.setItem('bland_from_number', $('blandFromNumber').value.trim());
+  localStorage.setItem('openai_api_key', $('openaiApiKey').value.trim());
+  $('setupStatus').textContent = 'Saved. Test the connection next.';
+  toast('Config saved');
+};
+
+$('testSetup').onclick = async () => {
+  $('setupStatus').textContent = 'Testing...';
+  try {
+    const result = await blandRequest('/calls?page_size=1');
+    $('setupStatus').textContent = `Connected to Bland AI. Total calls: ${result.total_calls || result.calls?.length || 0}`;
+    toast('Connection successful');
+  } catch (err) {
+    $('setupStatus').textContent = 'Connection failed: ' + err.message;
+    toast('Connection failed');
+  }
+};
+
+$('clearSetup').onclick = () => {
+  if (confirm('Clear all config?')) {
+    ['bland_api_key', 'bland_from_number', 'openai_api_key'].forEach(k => localStorage.removeItem(k));
+    loadSetup();
+    toast('Config cleared');
+  }
+};
+
+renderAgent();
+renderLeads();
+renderHistory();
+loadSetup();
+updateDashboard();
+icons();
+</script>
+</body>
+</html>
